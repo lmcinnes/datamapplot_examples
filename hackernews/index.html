@@ -1,0 +1,756 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <title>Hackernews Data Map</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+<style>
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 700;
+  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Cinzel';
+  font-style: normal;
+  font-weight: 900;
+  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf) format('truetype');
+}
+
+</style>
+
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+
+    <script src="https://unpkg.com/apache-arrow@latest/Arrow.es2015.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
+    <script src="https://unpkg.com/d3-cloud@1.2.7/build/d3.layout.cloud.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+      #d3histogram-container{position:absolute;bottom:0;left:0;margin:16px;padding:12px;border-radius:16px;z-index:2}#d3histogram-title,#d3histogram-subtitle{position:absolute;top:5px;font-size:small}#d3histogram-subtitle{right:15px}.d3histogram-axis{font-family:inherit}.d3histogram-axis path{display:none}.d3histogram-axis .tick>line{stroke-width:0.5}#d3histogram-interactioncontainer>.selection{fill:#c2c2c2;stroke:#cecece;stroke-width:0.5}
+    </style><style>
+      .datamapplot-progress-container{position:absolute;bottom:0;left:50%;transform:translate(-50%,0);width:512px;z-index:100}.datamapplot-progress-bar{width:100%;background-color:#e0e0e044;padding:3px;border-radius:6px;box-shadow:inset 0 1px 3px rgba(128,128,128,.2);margin-bottom:10px}.datamapplot-progress-bar-fill{display:block;height:12px;background-color:#659cef;border-radius:4px;transition:width 500ms ease-in-out}.datamapplot-progress-bar-text{color:white;text-align:center;line-height:12px;font-size:10px;overflow-x:visible;white-space:nowrap;vertical-align:top}
+    </style>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #ffffff;
+        font-family: Cinzel;
+        color: #000000;
+      }
+      .container-box {
+        margin: 16px;
+        padding: 12px;
+        border-radius: 16px;
+        line-height: 0.95;
+        z-index: 2;
+        background: #ffffffaa;
+        box-shadow: 2px 3px 10px #aaaaaa44;
+      }
+      .more-opaque {
+        background-color: #ffffffee;
+      }
+      #deck-container {
+        width: 100vw;
+        height: 100vh;
+      }
+      #deck-container canvas {
+        z-index: 1;
+        background: #ffffff;
+      }
+      .deck-tooltip {
+          
+            font-size: 0.8em;
+            font-family: Cinzel;
+            font-weight: 300;
+            color: #000000 !important;
+            background-color: #ffffffaa !important;
+            border-radius: 12px;
+            box-shadow: 2px 3px 10px #aaaaaa44;
+            max-width: 25%;
+      }
+      input {
+        margin: 2px;
+        padding: 4px;
+        border-radius: 8px;
+        color: #000000;
+        background: #ffffffdd;
+        border: 1px solid #ddddddff;
+        transition: 0.5s;
+        outline: none;
+      }
+      input:focus {
+        border: 2px solid #555;
+      }
+      #loading {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        position: absolute;
+        display: block;
+        z-index: 99
+      }
+      #loading-image {
+        position: absolute;
+        top: 45%;
+        left: 47.5%;
+        z-index: 100
+      }
+      #title-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      #logo-container {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+      img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #search-container{
+        position: absolute;
+        left: -16px;
+        margin: 16px;
+        width: fit-content;
+      }
+      
+#word-cloud {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: none;
+    width: 640px;
+    height: 480px;
+    z-index: 10;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="loading">
+      <img
+        id="loading-image"
+        src="https://i.gifer.com/ZKZg.gif"
+        alt="Loading..."
+        width="5%"
+      />
+    </div>
+
+    
+    <div id="title-container" class="container-box">
+      <span
+        style="font-family:Cinzel;font-size:36pt;color:#000000"
+      >
+        Hackernews Data Map
+      </span>
+      <br />
+      <span
+        style="font-family:Cinzel;font-size:18pt;color:#777777"
+      >
+        A Map of stories on Hackernews using UMAP and nomic-embed
+      </span>
+
+      
+      <div id="search-container" class="container-box">
+        <input autocomplete="off" type="search" id="text-search" placeholder="🔍" />
+      </div>
+      
+    </div>
+     
+    <div id="logo-container" class="container-box">
+      <img src="https://raw.githubusercontent.com/TutteInstitute/.github/main/profile/images/tutte_logo_redesign_horizontal_original_colours.png" style="width:256px" />
+    </div>
+    
+
+    <div id="deck-container"></div>
+    <div id="d3histogram-container" class="container-box"></div>
+    <div id="progress-container" class="datamapplot-progress-container container-box">
+      <div id="point-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Point Data: 0%</span>
+        </span>
+      </div>
+      <div id="label-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Label Data: 0%</span>
+        </span>
+      </div>
+      <div id="meta-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Meta Data: 0%</span>
+        </span>
+      </div>
+      <div id="histogram-bin-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Histogram Bin Data: 0%</span>
+        </span>
+      </div>
+      <div id="histogram-index-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Histogram Index Data: 0%</span>
+        </span>
+      </div></div> <div id="word-cloud" class="container-box more-opaque"></div></body>
+  <script>
+    LAYER_ORDER=['dataPointLayer','boundaryLayer','LabelLayer'];function getLayerIndex(object){return LAYER_ORDER.indexOf(object.id);}
+function isFontLoaded(fontName){return document.fonts.check(`12px "${fontName}"`);}
+function waitForFont(fontName,maxWait=500){return new Promise((resolve,reject)=>{if(isFontLoaded(fontName)){resolve();}else{const startTime=Date.now();const interval=setInterval(()=>{if(isFontLoaded(fontName)){clearInterval(interval);resolve();}else if(Date.now()-startTime>maxWait){clearInterval(interval);reject(new Error(`Font ${fontName} did not load within ${maxWait}ms`));}},50);}});}
+function getInitialViewportSize(){const width=document.documentElement.clientWidth;const height=document.documentElement.clientHeight;return{viewportWidth:width,viewportHeight:height};}
+function calculateZoomLevel(bounds,viewportWidth,viewportHeight,padding=0){const lngRange=bounds[1]-bounds[0];const latRange=bounds[3]-bounds[2];const centerLng=(bounds[0]+bounds[1])/2;const centerLat=(bounds[2]+bounds[3])/2;const zoomX=Math.log2(360/(lngRange/(viewportWidth/256)));const zoomY=Math.log2(180/(latRange/(viewportHeight/256)));const zoom=Math.min(zoomX,zoomY)-padding;return{zoomLevel:zoom,dataCenter:[centerLng,centerLat]};}
+class DataMap{constructor({container,bounds,searchItemId="text-search",lassoSelectionItemId="lasso-selection",}){this.container=container;this.searchItemId=searchItemId;this.lassoSelectionItemId=lassoSelectionItemId;this.pointData=null;this.metaData=null;this.layers=[];const{viewportWidth,viewportHeight}=getInitialViewportSize();const{zoomLevel,dataCenter}=calculateZoomLevel(bounds,viewportWidth,viewportHeight);this.deckgl=new deck.DeckGL({container:container,initialViewState:{latitude:dataCenter[1],longitude:dataCenter[0],zoom:zoomLevel},controller:{scrollZoom:{speed:0.01,smooth:true}},});this.updateTriggerCounter=0;this.dataSelectionManager=new DataSelectionManager(lassoSelectionItemId);}
+addPoints(pointData,{pointSize,pointOutlineColor=[250,250,250,128],pointLineWidth=0.001,pointHoverColor=[170,0,0,187],pointLineWidthMaxPixels=3,pointLineWidthMinPixels=0.001,pointRadiusMaxPixels=16,pointRadiusMinPixels=0.2,}){const numPoints=pointData.x.length;const positions=new Float32Array(numPoints*2);const colors=new Uint8Array(numPoints*4);const variableSize=pointSize<0;let sizes;if(variableSize){sizes=new Float32Array(numPoints);}else{sizes=null;}
+for(let i=0;i<numPoints;i++){positions[i*2]=pointData.x[i];positions[i*2+1]=pointData.y[i];colors[i*4]=pointData.r[i];colors[i*4+1]=pointData.g[i];colors[i*4+2]=pointData.b[i];colors[i*4+3]=pointData.a[i];if(variableSize){sizes[i]=pointData.size[i];}}
+this.selected=new Float32Array(numPoints).fill(1.0);this.pointSize=pointSize;this.pointOutlineColor=pointOutlineColor;this.pointLineWidth=pointLineWidth;this.pointHoverColor=pointHoverColor;this.pointLineWidthMaxPixels=pointLineWidthMaxPixels;this.pointLineWidthMinPixels=pointLineWidthMinPixels;this.pointRadiusMaxPixels=pointRadiusMaxPixels;this.pointRadiusMinPixels=pointRadiusMinPixels;let scatterAttributes={getPosition:{value:positions,size:2},getFillColor:{value:colors,size:4},getFilterValue:{value:this.selected,size:1}};if(variableSize){scatterAttributes.getRadius={value:sizes,size:1};}
+this.pointLayer=new deck.ScatterplotLayer({id:'dataPointLayer',data:{length:numPoints,attributes:scatterAttributes},getRadius:this.pointSize,getLineColor:this.pointOutlineColor,getLineWidth:this.pointLineWidth,highlightColor:this.pointHoverColor,lineWidthMaxPixels:this.pointLineWidthMaxPixels,lineWidthMinPixels:this.pointLineWidthMinPixels,radiusMaxPixels:this.pointRadiusMaxPixels,radiusMinPixels:this.pointRadiusMinPixels,radiusUnits:"common",lineWidthUnits:"common",autoHighlight:true,pickable:true,stroked:true,extensions:[new deck.DataFilterExtension({filterSize:1})],filterRange:[-0.5,1.5],filterSoftRange:[0.75,1.25],updateTriggers:{getFilterValue:this.updateTriggerCounter},instanceCount:numPoints,parameters:{depthTest:false}});this.layers.push(this.pointLayer);this.layers.sort((a,b)=>getLayerIndex(a)-getLayerIndex(b));this.deckgl.setProps({layers:[...this.layers]});}
+addLabels(labelData,{labelTextColor=d=>[d.r,d.g,d.b],textMinPixelSize=18,textMaxPixelSize=36,textOutlineWidth=8,textOutlineColor=[238,238,238,221],textBackgroundColor=[255,255,255,64],fontFamily="Roboto",fontWeight=900,lineSpacing=0.95,textCollisionSizeScale=3.0,}){const numLabels=labelData.length;this.labelTextColor=labelTextColor;this.textMinPixelSize=textMinPixelSize;this.textMaxPixelSize=textMaxPixelSize;this.textOutlineWidth=textOutlineWidth;this.textOutlineColor=textOutlineColor;this.textBackgroundColor=textBackgroundColor;this.fontFamily=fontFamily;this.fontWeight=fontWeight;this.lineSpacing=lineSpacing;this.textCollisionSizeScale=textCollisionSizeScale;waitForFont(this.fontFamily);this.labelLayer=new deck.TextLayer({id:'LabelLayer',data:labelData,pickable:false,getPosition:d=>[d.x,d.y],getText:d=>d.label,getColor:this.labelTextColor,getSize:d=>d.size,sizeScale:1,sizeMinPixels:this.textMinPixelSize,sizeMaxPixels:this.textMaxPixelSize,outlineWidth:this.textOutlineWidth,outlineColor:this.textOutlineColor,getBackgroundColor:this.textBackgroundColor,getBackgroundPadding:[15,15,15,15],background:true,characterSet:"auto",fontFamily:this.fontFamily,fontWeight:this.fontWeight,lineHeight:this.lineSpacing,fontSettings:{"sdf":true},getTextAnchor:"middle",getAlignmentBaseline:"center",lineHeight:0.95,elevation:100,collisionEnabled:true,getCollisionPriority:d=>d.size,collisionTestProps:{sizeScale:this.textCollisionSizeScale,sizeMaxPixels:this.textMaxPixelSize*2,sizeMinPixels:this.textMinPixelSize*2},extensions:[new deck.CollisionFilterExtension()],instanceCount:numLabels,parameters:{depthTest:false}});this.layers.push(this.labelLayer);this.layers.sort((a,b)=>getLayerIndex(a)-getLayerIndex(b));this.deckgl.setProps({layers:[...this.layers]});}
+addBoundaries(boundaryData,{clusterBoundaryLineWidth=0.5}){const numBoundaries=boundaryData.length;this.clusterBoundaryLineWidth=clusterBoundaryLineWidth;this.boundaryLayer=new deck.PolygonLayer({id:'boundaryLayer',data:boundaryData,stroked:true,filled:false,getLineColor:d=>[d.r,d.g,d.b,d.a],getPolygon:d=>d.polygon,lineWidthUnits:"common",getLineWidth:d=>d.size*d.size,lineWidthScale:this.clusterBoundaryLineWidth*5e-5,lineJointRounded:true,lineWidthMaxPixels:4,lineWidthMinPixels:0.0,instanceCount:numBoundaries,parameters:{depthTest:false}});this.layers.push(this.boundaryLayer);this.layers.sort((a,b)=>getLayerIndex(a)-getLayerIndex(b));this.deckgl.setProps({layers:[...this.layers]});}
+addMetaData(metaData,{tooltipFunction=({index})=>this.metaData.hover_text[index],onClickFunction=null,searchField=null,}){this.metaData=metaData;this.tooltipFunction=tooltipFunction;this.onClickFunction=onClickFunction;this.searchField=searchField;if(this.metaData.hasOwnProperty('hover_text')){this.deckgl.setProps({getTooltip:this.tooltipFunction,});}
+if(this.onClickFunction){this.deckgl.setProps({onClick:this.onClickFunction,});}
+if(this.searchField){this.searchArray=this.metaData[this.searchField].map(d=>d.toLowerCase());}}
+connectHistogram(histogramItem){this.histogramItem=histogramItem;this.histogramItemId=histogramItem.state.chart.chartContainerId;}
+highlightPoints(itemId){const selectedIndices=this.dataSelectionManager.getSelectedIndices();const semiSelectedIndices=this.dataSelectionManager.getBasicSelectedIndices();const hasSelectedIndices=selectedIndices.size!==0;const hasSemiSelectedIndices=semiSelectedIndices.size!==0;const hasLassoSelection=this.dataSelectionManager.hasSpecialSelection();if(hasLassoSelection){if(hasSelectedIndices){if(hasSemiSelectedIndices){this.selected.fill(-1.0);for(let i of semiSelectedIndices){this.selected[i]=0.0;}}else{this.selected.fill(0.0);}
+for(let i of selectedIndices){this.selected[i]=1.0;}}else{this.selected.fill(1.0);}}else{if(hasSelectedIndices){this.selected.fill(-1.0);for(let i of selectedIndices){this.selected[i]=1.0;}}else{this.selected.fill(1.0);}}
+this.updateTriggerCounter++;const updatedPointLayer=this.pointLayer.clone({data:{...this.pointLayer.props.data,attributes:{...this.pointLayer.props.data.attributes,getFilterValue:{value:this.selected,size:1}}},updateTriggers:{getFilterValue:this.updateTriggerCounter}});const idx=this.layers.indexOf(this.pointLayer);this.deckgl.setProps({layers:[...this.layers.slice(0,idx),updatedPointLayer,...this.layers.slice(idx+1)]});if(this.histogramItem&&itemId!==this.histogramItemId){if(hasSelectedIndices){this.histogramItem.drawChartWithSelection(selectedIndices);}else{this.histogramItem.removeChartWithSelection(selectedIndices);}}}
+addSelection(selectedIndices,selectionKind){this.dataSelectionManager.addOrUpdateSelectedIndicesOfItem(selectedIndices,selectionKind);this.highlightPoints(selectionKind);}
+removeSelection(selectionKind){this.dataSelectionManager.removeSelectedIndicesOfItem(selectionKind);this.highlightPoints(selectionKind);}
+getSelectedIndices(){return this.dataSelectionManager.getSelectedIndices();}
+searchText(searchTerm){const searchTermLower=searchTerm.toLowerCase();const selectedIndices=this.searchArray.reduce((indices,d,i)=>{if(d.indexOf(searchTermLower)>=0){indices.push(i);}
+return indices;},[]);if(searchTerm===""){this.dataSelectionManager.removeSelectedIndicesOfItem(this.searchItemId);}else{this.dataSelectionManager.addOrUpdateSelectedIndicesOfItem(selectedIndices,this.searchItemId);}
+this.highlightPoints(this.searchItemId);}}
+  </script>
+  <script>
+    class DataSelectionManager{constructor(specialItem){this.excludeItem=specialItem;this.selectedIndicesByItem={};this.selectedIndicesCommon=new Set();this.selectedIndicesBasicCommon=new Set();}
+addOrUpdateSelectedIndicesOfItem(indices,itemId){const isNewItem=!this.selectedIndicesByItem.hasOwnProperty(itemId);this.selectedIndicesByItem[itemId]=new Set(indices);this.#updateSelectedIndicesCommon(isNewItem?itemId:null);}
+removeSelectedIndicesOfItem(itemId){if(this.selectedIndicesByItem.hasOwnProperty(itemId)){delete this.selectedIndicesByItem[itemId];this.#updateSelectedIndicesCommon();}}
+getSelectedIndices(){return this.selectedIndicesCommon;}
+getBasicSelectedIndices(){return this.selectedIndicesBasicCommon;}
+hasSpecialSelection(){return this.selectedIndicesByItem.hasOwnProperty(this.excludeItem);}#updateSelectedIndicesCommon(newItem=null){const sets=Object.values(this.selectedIndicesByItem);if(sets.length===0){this.selectedIndicesCommon=new Set();this.selectedIndicesBasicCommon=new Set();return;}
+if(sets.length===1){this.selectedIndicesCommon=sets[0];if(Object.keys(this.selectedIndicesByItem)[0]!==this.excludeItem){this.selectedIndicesBasicCommon=sets[0];}else{this.selectedIndicesBasicCommon=new Set();}
+return;}
+if(newItem){const newSet=this.selectedIndicesByItem[newItem];this.selectedIndicesCommon=this.selectedIndicesCommon.intersection(newSet);if(newItem!==this.excludeItem){this.selectedIndicesBasicCommon=this.selectedIndicesBasicCommon.intersection(newSet);}
+return;}
+this.selectedIndicesCommon=sets[0];for(let i=1;i<sets.length;i++){this.selectedIndicesCommon=this.selectedIndicesCommon.intersection(sets[i]);if(this.selectedIndicesCommon.size===0){break;}}
+const otherSelectionItems=Object.keys(this.selectedIndicesByItem).filter(key=>key!==this.excludeItem);this.selectedIndicesBasicCommon=this.selectedIndicesByItem[otherSelectionItems[0]];for(let i=1;i<otherSelectionItems.length;i++){const otherSelection=this.selectedIndicesByItem[otherSelectionItems[i]];this.selectedIndicesBasicCommon=this.selectedIndicesBasicCommon.intersection(otherSelection);}}}
+  </script>
+  <script>
+    const D3Histogram=(()=>{isTypedArray=arr=>{return arr instanceof Float32Array||arr instanceof Float64Array||arr instanceof Int8Array||arr instanceof Uint8Array||arr instanceof Uint8ClampedArray||arr instanceof Int16Array||arr instanceof Uint16Array||arr instanceof Int32Array||arr instanceof Uint32Array;}
+isValidDataType=data=>{return typeof data[0]==='number'||typeof data[0]==='string'||data[0]instanceof Date||isValidDateStr(data[0]);};isValidDateStr=dateStr=>!isNaN((new Date(dateStr)).getTime());class D3Histogram{static DATA_TYPE_E=Object.freeze({NUMERICAL:'number',CATEGORICAL:'string',TEMPORAL:'date'});static CLIP_BOUNDS_ID="d3histogram-clipBounds";static BIN_RECT_CLASS_ID="d3histogram-bin";static BIN_FOCUS_GROUP_ID="d3histogram-focuscontainer";static BIN_FOCUS_RECT_CLASS_ID="d3histogram-binFocus";static BIN_MIN_WIDTH=10;static BIN_MAX_WIDTH=30;static AXIS_CLASS_ID='d3histogram-axis';static XAXIS_GROUP_ID='d3histogram-xaxis';static YAXIS_GROUP_ID='d3histogram-yaxis';static XAXIS_TICKS_NB=4;static YAXIS_TICKS_NB=2;static INTERACTION_CONTAINER_ID="d3histogram-interactioncontainer";static create({data,chartContainerId,chartWidth=300,chartHeight=70,title='',binCount=-1,binDefaultFillColor="#6290C3",binSelectedFillColor="#2EBFA5",binUnselectedFillColor="#9E9E9E",binContextFillColor="#E6E6E6",logScale=false,chartSelectionCallback=()=>{}}){if(!chartContainerId){console.error("Error: chart container ID was not provided.");return null;}
+try{return new D3Histogram({data,chartContainerId,chartDimensions:{width:chartWidth,height:chartHeight,margin:{top:20,right:5,bottom:20,left:20}},title,binCount,binDefaultFillColor,binSelectedFillColor,binUnselectedFillColor,binContextFillColor,logScale,chartSelectionCallback});}catch(error){console.error("Error creating D3Histogram:",error);return null;}}
+constructor({data,chartContainerId,chartDimensions,title,binCount,binDefaultFillColor,binSelectedFillColor,binUnselectedFillColor,binContextFillColor,logScale,chartSelectionCallback}){const{width,height,margin:{top,right,bottom,left}}=chartDimensions;const boundedWidth=width-left-right;const boundedHeight=height-top-bottom;this.state={data:{dataType:null,rawData:data,binsData:new Map(),indicesData:new Int16Array(),rawFocusData:null,binsFocusData:null,binCount:binCount!=-1?binCount:null,overallBinMin:null,overallBinMax:null,},chart:{chartContainerId:chartContainerId,dimensions:{...chartDimensions,boundedHeight,boundedWidth},wrapper:null,bounds:null,binDefaultFillColor,binSelectedFillColor,binUnselectedFillColor,binContextFillColor,logScale,binFocusDefaultFillColor:binDefaultFillColor,binFocusSelectedFillColor:binSelectedFillColor,binFocusUnselectedFillColor:binUnselectedFillColor,chartSelectionCallback},peripherals:{header:{title:title.length!==0?title:"DataMap Distribution",subtitle:null,titleDiv:null,subtitleDiv:null,},axes:{xAccessor:()=>{},yAccessor:()=>{},xScale:()=>{},yScale:()=>{},xAxis:()=>{},yAxis:()=>{},originalXScaleRange:null,}},interactions:{isBrushingActive:false,brush:null,prevBrushedDomain:null,isPanningActive:false,prevPanX:0,prevHoveredBinId:-1,prevZoomK:1}};this.#parseData();this.#drawCanvas();this.#drawChart();this.#initInteractions();}
+drawChartWithSelection(selectedIndices){this.#parseFocusData(selectedIndices);this.#drawFocusChart();this.#reset();}
+removeChartWithSelection(){const{BIN_FOCUS_GROUP_ID:binsFocusGroupId}=D3Histogram;const{bounds}=this.state.chart;this.#clearFocusData();bounds.select(`#${binsFocusGroupId}`).remove();this.#reset();}#parseData(){const{DATA_TYPE_E}=D3Histogram;let{dataType}=this.state.data;let{binsData,indicesData}=this.state.data;const{rawData}=this.state.data;const{rawBinData,rawIndexData}=rawData;const value=rawBinData[0].mean_value;if(typeof value==='number'){dataType=DATA_TYPE_E.NUMERICAL;}
+else if(isValidDateStr(value)){dataType=DATA_TYPE_E.TEMPORAL;}
+else{dataType=DATA_TYPE_E.CATEGORICAL;}
+rawBinData.forEach(bin=>{const parsedBin={id:bin.id,min:dataType===DATA_TYPE_E.TEMPORAL?new Date(bin.min_value):bin.min_value,max:dataType===DATA_TYPE_E.TEMPORAL?new Date(bin.max_value):bin.max_value,mean:dataType===DATA_TYPE_E.CATEGORICAL?bin.id:bin.mean_value,label:bin.mean_value,indices:new Set(bin.indices)};binsData.set(bin.id,parsedBin);});indicesData=new Int16Array(rawIndexData["bin_id"]);this.state.data.dataType=dataType;this.state.data.binsData=binsData;this.state.data.indicesData=indicesData;this.state.data.binCount=binsData.size;}#parseFocusData(selectedIndices){const{binsData,indicesData}=this.state.data;const rawFocusData=new Map();binsData.forEach(bin=>{const focusBin={indices:new Set(),binId:bin.id,min:bin.min,max:bin.max,mean:bin.mean,label:bin.label};rawFocusData.set(bin.id,focusBin);});const selectedSet=new Set(selectedIndices);indicesData.forEach((binId,index)=>{if(selectedSet.has(index)){const bin=rawFocusData.get(binId);bin.indices.add(index);}});const binsFocusData=rawFocusData;this.state.data.rawFocusData=rawFocusData;this.state.data.binsFocusData=binsFocusData;}#clearFocusData(){let{rawFocusData,binsFocusData}=this.state.data;rawFocusData=null;binsFocusData=null;this.state.data.rawFocusData=rawFocusData;this.state.data.binsFocusData=binsFocusData;}#drawCanvas(){const{chartContainerId,dimensions,}=this.state.chart;let{wrapper,bounds}=this.state.chart;wrapper=d3.select(`#${chartContainerId}`).append("svg").attr("width",dimensions.width).attr("height",dimensions.height);bounds=wrapper.append("g").style("transform",`translate(${dimensions.margin.left}px, ${dimensions.margin.top}px)`);this.state.chart.wrapper=wrapper;this.state.chart.bounds=bounds;}#drawChart(){const{CLIP_BOUNDS_ID,BIN_RECT_CLASS_ID,AXIS_CLASS_ID,XAXIS_GROUP_ID,YAXIS_GROUP_ID,XAXIS_TICKS_NB,YAXIS_TICKS_NB}=D3Histogram;const{dimensions,chartContainerId,bounds,binDefaultFillColor,logScale}=this.state.chart;const{title}=this.state.peripherals.header;const binsData=Array.from(this.state.data.binsData.values());let{overallBinMin,overallBinMax}=this.state.data;const xAccessor=d=>d.mean;const yAccessor=d=>d.indices.size;const xScale=d3.scaleBand().domain(binsData.map(d=>xAccessor(d))).range([0,dimensions.boundedWidth]).padding(0.1);xScale.invert=function(_){const scale=this;const domain=scale.domain;const paddingOuter=scale.paddingOuter();const step=scale.step();const range=scale.range();var domainIndex,n=domain().length,reverse=range[1]<range[0],start=range[reverse-0],stop=range[1-reverse];if(_<start+paddingOuter*step)domainIndex=0;else if(_>stop-paddingOuter*step)domainIndex=n-1;else domainIndex=Math.floor((_-start-paddingOuter*step)/step);return domain()[domainIndex];};let yScale=null;if(logScale){yScale=d3.scaleSymlog().domain([0,d3.max(binsData,yAccessor)]).range([dimensions.boundedHeight,0]);}else{yScale=d3.scaleLinear().domain([0,d3.max(binsData,yAccessor)]).range([dimensions.boundedHeight,0]);}
+this.state.peripherals.axes.originalXScaleRange=xScale.range();this.state.peripherals.axes.xAccessor=xAccessor;this.state.peripherals.axes.yAccessor=yAccessor;this.state.peripherals.axes.xScale=xScale;this.state.peripherals.axes.yScale=yScale;bounds.append("defs").append("clipPath").attr("id",CLIP_BOUNDS_ID).append("rect").attr("width",dimensions.boundedWidth).attr("height",dimensions.boundedHeight);const binsGroup=bounds.append("g");const binGroups=binsGroup.selectAll("g").data(binsData).join("g");const binRects=binGroups.append("rect").attr("id",(_,i)=>`${BIN_RECT_CLASS_ID}${i}`).attr("class",BIN_RECT_CLASS_ID).attr("x",d=>xScale(xAccessor(d))).attr("y",d=>yScale(yAccessor(d))).attr("width",xScale.bandwidth()).attr("height",d=>dimensions.boundedHeight-yScale(yAccessor(d))).attr("fill",binDefaultFillColor).attr("clip-path",`url(#${CLIP_BOUNDS_ID})`);const yAxisTickFormat=d3.format(".1s");const yAxis=d3.axisRight(yScale).ticks(logScale?2*YAXIS_TICKS_NB:YAXIS_TICKS_NB).tickFormat(d=>d===yScale.domain()[0]?'':yAxisTickFormat(d));bounds.append("g").attr("id",YAXIS_GROUP_ID).attr("class",AXIS_CLASS_ID).style("transform",`translate(-${dimensions.margin.left*.5}px, 0px)`).call(yAxis);const xAxis=d3.axisBottom(xScale).tickValues(this.#getAxisTickValues(xScale,XAXIS_TICKS_NB)).tickFormat(d=>this.#getFormattedAxisTickValue(d));bounds.append("g").attr("id",XAXIS_GROUP_ID).attr("class",AXIS_CLASS_ID).attr("transform",`translate(0,${dimensions.boundedHeight})`).call(xAxis);const chartDiv=document.getElementById(chartContainerId);const titleDiv=document.createElement('div');titleDiv.id="d3histogram-title";chartDiv.appendChild(titleDiv);d3.select(`#${titleDiv.id}`).html(`<b>${title}</b>`)
+const subtitleDiv=document.createElement('div');subtitleDiv.id="d3histogram-subtitle";chartDiv.appendChild(subtitleDiv);overallBinMin=Infinity;overallBinMax=-Infinity;binsData.forEach((binInfo,binId,map)=>{const{min,max}=binInfo;overallBinMin=Math.min(overallBinMin,min);overallBinMax=Math.max(overallBinMax,max);});const subtitle=this.#getSubtitle([overallBinMin,overallBinMax]);d3.select(`#${subtitleDiv.id}`).html(subtitle);this.state.data.overallBinMin=overallBinMin;this.state.data.overallBinMax=overallBinMax;this.state.peripherals.axes.xAxis=xAxis;this.state.peripherals.axes.yAxis=yAxis;this.state.peripherals.header.title=title;this.state.peripherals.header.subtitle=subtitle;this.state.peripherals.header.titleDiv=titleDiv;this.state.peripherals.header.subtitleDiv=subtitleDiv;}#drawFocusChart(){const{CLIP_BOUNDS_ID,BIN_FOCUS_GROUP_ID,BIN_FOCUS_RECT_CLASS_ID}=D3Histogram;const{xAccessor,yAccessor,xScale,yScale}=this.state.peripherals.axes;const{binFocusDefaultFillColor,dimensions,bounds}=this.state.chart;let binsFocusData=Array.from(this.state.data.binsFocusData.values());bounds.select(`#${BIN_FOCUS_GROUP_ID}`).remove();const binsFocusGroup=bounds.append("g").attr("id",BIN_FOCUS_GROUP_ID);const binsFocusGroups=binsFocusGroup.selectAll("g").data(binsFocusData).join("g");const binFocusRects=binsFocusGroups.append("rect").attr("id",(_,i)=>`${BIN_FOCUS_RECT_CLASS_ID}${i}`).attr("class",BIN_FOCUS_RECT_CLASS_ID).attr("x",d=>xScale(xAccessor(d))).attr("y",d=>yScale(yAccessor(d))).attr("width",xScale.bandwidth()).attr("height",d=>dimensions.boundedHeight-yScale(yAccessor(d))).attr("fill",binFocusDefaultFillColor).attr("clip-path",`url(#${CLIP_BOUNDS_ID})`);}#hasFocusChart=_=>this.state.data.rawFocusData!==null;#reset(){const{BIN_RECT_CLASS_ID,BIN_FOCUS_RECT_CLASS_ID,YAXIS_GROUP_ID,INTERACTION_CONTAINER_ID}=D3Histogram;const{overallBinMin,overallBinMax}=this.state.data;const{subtitleDiv}=this.state.peripherals.header;const{brush}=this.state.interactions;const{binDefaultFillColor,binContextFillColor,binFocusDefaultFillColor,chartSelectionCallback}=this.state.chart;let{isBrushingActive,prevBrushedDomain,isPanningActive,prevPanX,prevHoveredBinId}=this.state.interactions;d3.selectAll(`.${BIN_RECT_CLASS_ID}`).style("fill",this.#hasFocusChart()?binContextFillColor:binDefaultFillColor);d3.selectAll(`.${BIN_FOCUS_RECT_CLASS_ID}`).style("fill",binFocusDefaultFillColor);chartSelectionCallback(null);let subtitle=this.#getSubtitle([overallBinMin,overallBinMax]);d3.select(`#${subtitleDiv.id}`).html(subtitle);d3.select(`#${INTERACTION_CONTAINER_ID}`).call(brush.clear);prevBrushedDomain=null;isBrushingActive=false;isPanningActive=false;prevHoveredBinId=-1;prevPanX=0;d3.select(`#${YAXIS_GROUP_ID}`).raise();d3.select(`#${INTERACTION_CONTAINER_ID}`).raise();this.state.interactions.isBrushingActive=isBrushingActive;this.state.interactions.prevBrushedDomain=prevBrushedDomain;this.state.interactions.prevHoveredBinId=prevHoveredBinId;this.state.interactions.isPanningActive=isPanningActive;this.state.interactions.prevPanX=prevPanX;}#initInteractions(){const{INTERACTION_CONTAINER_ID,BIN_MAX_WIDTH}=D3Histogram;const{dimensions,bounds}=this.state.chart;const{binCount}=this.state.data;let{brush}=this.state.interactions;brush=d3.brushX().extent([[0,0],[dimensions.boundedWidth,dimensions.boundedHeight]]).on("brush",e=>this.#handleBrush(e)).on("end",e=>this.#handleBrushEnd(e));bounds.append("g").attr("id",INTERACTION_CONTAINER_ID).call(brush);d3.select(`#${INTERACTION_CONTAINER_ID}`).on('mousedown',e=>this.#handleMouseDown(e)).on('mouseup',e=>this.#handleMouseUp(e)).on('mousemove',e=>this.#handleMouseMove(e)).on('mouseleave',e=>this.#handleMouseLeave(e));const maxK=(binCount*BIN_MAX_WIDTH)/dimensions.boundedWidth;const zoom=d3.zoom().scaleExtent([1,maxK]).translateExtent([[0,0],[dimensions.boundedWidth,dimensions.boundedHeight]]).extent([[0,0],[dimensions.boundedWidth,dimensions.boundedHeight]]).filter(event=>event.type==='wheel').on("zoom",e=>this.#handleZoom(e));d3.select(`#${INTERACTION_CONTAINER_ID}`).call(zoom);this.state.interactions.brush=brush;}#handleBrush(e){const{DATA_TYPE_E,BIN_RECT_CLASS_ID,BIN_FOCUS_RECT_CLASS_ID}=D3Histogram;const{binSelectedFillColor,binUnselectedFillColor,binContextFillColor,binFocusSelectedFillColor,binFocusUnselectedFillColor,chartSelectionCallback}=this.state.chart;const{xAccessor,xScale}=this.state.peripherals.axes;const{subtitleDiv}=this.state.peripherals.header;const{dataType,binsData,binsFocusData}=this.state.data;let{isBrushingActive,prevBrushedDomain}=this.state.interactions;if(dataType===DATA_TYPE_E.CATEGORICAL){this.#removeBrush();return;}
+if(!e.sourceEvent||!e.selection){return;}
+isBrushingActive=true;const brushedDomain=e.selection.map(xScale.invert,xScale);const data=this.#hasFocusChart()?binsFocusData:binsData;const brushedDomainBinned=[Infinity,-Infinity];let brushedBins=[];data.forEach((d,i)=>{if(xAccessor(d)>=brushedDomain[0]&&xAccessor(d)<=brushedDomain[1]){brushedBins.push(d);brushedDomainBinned[0]=Math.min(brushedDomainBinned[0],d.min);brushedDomainBinned[1]=Math.max(brushedDomainBinned[1],d.max);}});const brushedBinIds=brushedBins.map(b=>b.id);if(prevBrushedDomain!=null&&prevBrushedDomain[0]===brushedDomainBinned[0]&&prevBrushedDomain[1]===brushedDomainBinned[1]){return;}
+prevBrushedDomain=brushedDomainBinned;d3.selectAll(`.${BIN_RECT_CLASS_ID}`).style("fill",this.#hasFocusChart()?binContextFillColor:(_,i)=>brushedBinIds.includes(i)?binSelectedFillColor:binUnselectedFillColor);d3.selectAll(`.${BIN_FOCUS_RECT_CLASS_ID}`).style("fill",(_,i)=>brushedBinIds.includes(i)?binFocusSelectedFillColor:binFocusUnselectedFillColor);const subtitle=this.#getSubtitle(brushedDomainBinned);d3.select(`#${subtitleDiv.id}`).html(subtitle);let brushedIndices=new Set();brushedBins.forEach(b=>{brushedIndices=brushedIndices.union(b.indices);});chartSelectionCallback(brushedIndices);this.state.interactions.isBrushingActive=isBrushingActive;this.state.interactions.prevBrushedDomain=prevBrushedDomain;}#handleBrushEnd(e){const{DATA_TYPE_E}=D3Histogram;const{dataType}=this.state.data;if(dataType!==DATA_TYPE_E.CATEGORICAL&&e.sourceEvent&&!e.selection){this.#reset();}}#removeBrush(){const{INTERACTION_CONTAINER_ID}=D3Histogram;d3.select(`#${INTERACTION_CONTAINER_ID}`).selectAll(".handle").style("display","none");d3.select(`#${INTERACTION_CONTAINER_ID}`).selectAll(".selection").style("display","none");}#handleMouseDown(e){const{isBrushingActive}=this.state.interactions;let{isPanningActive,prevPanX}=this.state.interactions;if(isBrushingActive||e.button!=1){return;}
+isPanningActive=true;prevPanX=e.clientX;this.state.interactions.isPanningActive=isPanningActive;this.state.interactions.prevPanX=prevPanX;}#handleMouseUp(e){const{isBrushingActive}=this.state.interactions;let{isPanningActive,prevPanX}=this.state.interactions;if(isBrushingActive||e.button!=1){return;}
+isPanningActive=false;this.state.interactions.isPanningActive=isPanningActive;}#handleMouseMove(e){const{isBrushingActive,isPanningActive}=this.state.interactions;if(isBrushingActive){return;}
+if(isPanningActive){this.#handlePan(e);}
+else{this.#handleHover(e);}}#handleMouseLeave(_){const{isBrushingActive}=this.state.interactions;if(!isBrushingActive){this.#reset();}}#handleHover(e){const{BIN_RECT_CLASS_ID,BIN_FOCUS_RECT_CLASS_ID}=D3Histogram;const{binSelectedFillColor,binUnselectedFillColor,binContextFillColor,binFocusSelectedFillColor,binFocusUnselectedFillColor,chartSelectionCallback}=this.state.chart;const{xAccessor,xScale}=this.state.peripherals.axes;const{subtitleDiv}=this.state.peripherals.header;const{binsData,binsFocusData}=this.state.data;let{prevHoveredBinId}=this.state.interactions;const data=this.#hasFocusChart()?binsFocusData:binsData;const xCoord=d3.pointer(e)[0];let hoveredBinId=-1;data.forEach((d,i)=>{if(xCoord>xScale(xAccessor(d))&&xCoord<=xScale(xAccessor(d))+xScale.bandwidth()){hoveredBinId=i;}});if(hoveredBinId===-1||hoveredBinId===prevHoveredBinId){return;}
+prevHoveredBinId=hoveredBinId;const binClassId=this.#hasFocusChart()?BIN_FOCUS_RECT_CLASS_ID:BIN_RECT_CLASS_ID;const hoveredBin=d3.select(`#${binClassId}${hoveredBinId}`).data()[0];const subtitle=this.#getSubtitle([hoveredBin.min,hoveredBin.max]);d3.select(`#${subtitleDiv.id}`).html(subtitle);d3.selectAll(`.${BIN_RECT_CLASS_ID}`).style("fill",(_,i)=>this.#hasFocusChart()?binContextFillColor:i==hoveredBinId?binSelectedFillColor:binUnselectedFillColor);d3.selectAll(`.${BIN_FOCUS_RECT_CLASS_ID}`).style("fill",(_,i)=>i==hoveredBinId?binFocusSelectedFillColor:binFocusUnselectedFillColor);chartSelectionCallback(hoveredBin.indices);this.state.interactions.prevHoveredBinId=prevHoveredBinId;}#handlePan(e){const{XAXIS_GROUP_ID,YAXIS_GROUP_ID,BIN_RECT_CLASS_ID,BIN_FOCUS_RECT_CLASS_ID}=D3Histogram;const{originalXScaleRange,xAccessor,yAccessor,xAxis,yAxis}=this.state.peripherals.axes;const{dimensions,wrapper}=this.state.chart;const{binsData}=this.state.data;let{xScale,yScale}=this.state.peripherals.axes;let{prevPanX}=this.state.interactions;const dX=e.clientX-prevPanX;prevPanX=e.clientX;let pannedRange=xScale.range().map(d=>d+dX);if(pannedRange[1]<originalXScaleRange[1]){pannedRange=[pannedRange[0]+originalXScaleRange[1]-pannedRange[1],originalXScaleRange[1]];}else if(pannedRange[0]>originalXScaleRange[0]){pannedRange=[originalXScaleRange[0],pannedRange[1]-pannedRange[0]-originalXScaleRange[0]];}
+xScale.range(pannedRange);wrapper.select(`#${XAXIS_GROUP_ID}`).call(xAxis);const pannedDomain=originalXScaleRange.map(xScale.invert,xScale);const pannedBinsData=Array.from(binsData.values()).filter(d=>xAccessor(d)>=pannedDomain[0]&&xAccessor(d)<=pannedDomain[1]);yScale.domain([0,d3.max(pannedBinsData,yAccessor)]);wrapper.select(`#${YAXIS_GROUP_ID}`).transition().call(yAxis);wrapper.selectAll(`.${BIN_RECT_CLASS_ID}, .${BIN_FOCUS_RECT_CLASS_ID}`).attr("x",d=>xScale(xAccessor(d))).transition().attr("y",d=>yScale(yAccessor(d))).attr("height",d=>dimensions.boundedHeight-yScale(yAccessor(d)));this.state.interactions.prevPanX=prevPanX;}#handleZoom(e){const{isBrushingActive}=this.state.interactions;const{dimensions,wrapper}=this.state.chart;const{binsData}=this.state.data;const{XAXIS_GROUP_ID,YAXIS_GROUP_ID,XAXIS_TICKS_NB,BIN_RECT_CLASS_ID,BIN_FOCUS_RECT_CLASS_ID}=D3Histogram;const{originalXScaleRange,xAccessor,yAccessor,xScale,yScale,xAxis,yAxis}=this.state.peripherals.axes;let{prevZoomK}=this.state.interactions;if(isBrushingActive||e.sourceEvent.type!=="wheel"||prevZoomK==e.transform.k)return;prevZoomK=e.transform.k;xScale.range([0,dimensions.boundedWidth].map(d=>e.transform.applyX(d)));xAxis.tickValues(this.#getAxisTickValues(xScale,XAXIS_TICKS_NB*e.transform.k));wrapper.select(`#${XAXIS_GROUP_ID}`).transition().call(xAxis);const zoomedDomain=originalXScaleRange.map(xScale.invert,xScale);const zoomedData=Array.from(binsData.values()).filter(d=>xAccessor(d)>=zoomedDomain[0]&&xAccessor(d)<=zoomedDomain[1]);yScale.domain([0,d3.max(zoomedData,yAccessor)]);wrapper.select(`#${YAXIS_GROUP_ID}`).transition().call(yAxis);wrapper.selectAll(`.${BIN_RECT_CLASS_ID}, .${BIN_FOCUS_RECT_CLASS_ID}`).transition().attr("x",d=>xScale(xAccessor(d))).attr("y",d=>yScale(yAccessor(d))).attr("width",xScale.bandwidth()).attr("height",d=>dimensions.boundedHeight-yScale(yAccessor(d)))
+this.state.interactions.prevZoomK=prevZoomK;}#getAxisTickValues=(scale,numTicks)=>{const domain=scale.domain();const ticksInterval=Math.max(1,Math.floor(domain.length/numTicks));let tickValues;if(domain.length<=numTicks){tickValues=domain;}else{tickValues=domain.filter((_,i)=>i%ticksInterval===0);while(tickValues.length<numTicks){tickValues.push(domain[domain.length-1]);}}
+return tickValues;};#getFormattedAxisTickValue(value){const{DATA_TYPE_E}=D3Histogram;const{dataType}=this.state.data;let formattedValue=value;if(dataType===DATA_TYPE_E.NUMERICAL){formattedValue=this.#formatNumericalValue(value);}
+else if(dataType===DATA_TYPE_E.CATEGORICAL){formattedValue=this.#formatCategoricalValue(value);}
+else if(dataType===DATA_TYPE_E.TEMPORAL){formattedValue=this.#formatTemporalValue(value);}
+return formattedValue;}#getSubtitle(range){const{DATA_TYPE_E}=D3Histogram;const{dataType,binsData}=this.state.data;if(dataType===DATA_TYPE_E.CATEGORICAL){return range[0]===range[1]?`<b>${binsData.get(range[0]).label}</b>`:'';}
+let formattedRange=null;if(dataType===DATA_TYPE_E.NUMERICAL){formattedRange=range.map(d=>this.#formatNumericalValue(d));}
+else{formattedRange=range.map(d=>this.#formatTemporalValue(d));}
+return`<b>${formattedRange[0]} — ${formattedRange[1]}</b>`;}#formatCategoricalValue(value){const{xAccessor}=this.state.peripherals.axes;const{binsData}=this.state.data;const tickBin=Array.from(binsData.values()).filter(b=>xAccessor(b)===value)[0];const firstWhiteSpaceIndex=tickBin.label.indexOf(' ');return firstWhiteSpaceIndex!==-1?tickBin.label.slice(0,firstWhiteSpaceIndex):tickBin.label;}#formatNumericalValue(value){const formatWithSI=d3.format(".4s");let formattedValue=formatWithSI(value);formattedValue=formattedValue.replace('µ','u');return formattedValue.replace(/(\.[0-9]*[1-9])0+|\.0*([a-zA-Z]*)$/,'$1$2');}#formatTemporalValue(value){const formatTime=d3.utcFormat("%b %Y");return formatTime(new Date(value));}}
+return D3Histogram;})();
+  </script>
+  <script>
+    class LassoSelectionTool{constructor(datamap,handleSelectedPoints){this.datamap=datamap;this.handleSelectedPoints=handleSelectedPoints;this.itemId=datamap.lassoSelectionItemId;this.selectionMode=false;this.lassoPolygon=[];this.quadTree=null;this.points=null;this.initCanvas();this.initEventListeners();this.initQuadTree();}
+initQuadTree(){const scatterLayer=this.datamap.deckgl.props.layers.find(layer=>layer instanceof deck.ScatterplotLayer);if(!scatterLayer)return;const{attributes}=scatterLayer.props.data;this.points=attributes.getPosition.value;let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(let i=0;i<this.points.length;i+=2){minX=Math.min(minX,this.points[i]);maxX=Math.max(maxX,this.points[i]);minY=Math.min(minY,this.points[i+1]);maxY=Math.max(maxY,this.points[i+1]);}
+const numPoints=this.points.length/2;const leafSize=Math.max(Math.ceil(Math.sqrt(numPoints)),64);const boundary={x:minX,y:minY,width:maxX-minX,height:maxY-minY};this.quadTree=new QuadTree(boundary,leafSize);for(let i=0;i<this.points.length/2;i++){this.quadTree.insert(this.points,i);}}
+initCanvas(){this.canvas=document.createElement('canvas');this.canvas.width=this.datamap.container.clientWidth;this.canvas.height=this.datamap.container.clientHeight;this.canvas.style.position='absolute';this.canvas.style.top='0';this.canvas.style.left='0';this.canvas.style.pointerEvents='none';this.canvas.style.zIndex='1000';document.body.appendChild(this.canvas);this.ctx=this.canvas.getContext('2d');}
+drawLasso(lassoPolygon){this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);this.ctx.beginPath();lassoPolygon.forEach(({x,y},index)=>{const[screenX,screenY]=this.datamap.deckgl.viewManager.getViewports()[0].project([x,y]);if(index===0){this.ctx.moveTo(screenX,screenY);}else{this.ctx.lineTo(screenX,screenY);}});this.ctx.closePath();this.ctx.lineWidth=2;this.ctx.strokeStyle='rgba(0, 128, 255, 0.8)';this.ctx.stroke();this.ctx.fillStyle='rgba(0, 128, 255, 0.1)';this.ctx.fill();}
+handleSelection(selectedPoints){if(selectedPoints.length===0){this.datamap.removeSelection(this.itemId);}else{this.datamap.addSelection(selectedPoints,this.itemId);}
+this.handleSelectedPoints(selectedPoints);}
+onLassoComplete(lassoPolygon){if(!this.quadTree||!this.points)return;let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(const point of lassoPolygon){minX=Math.min(minX,point.x);maxX=Math.max(maxX,point.x);minY=Math.min(minY,point.y);maxY=Math.max(maxY,point.y);}
+let potentialIndices=this.quadTree.query({x:minX,y:minY,width:maxX-minX,height:maxY-minY},this.points);let selectedPoints=[];const currentSelectedIndices=this.datamap.dataSelectionManager.getBasicSelectedIndices();const selectFromAllPoints=currentSelectedIndices.size===0;if(selectFromAllPoints){selectedPoints=potentialIndices.filter(index=>this.isPointInPolygon({x:this.points[index*2],y:this.points[index*2+1]},lassoPolygon));}else{selectedPoints=potentialIndices.filter(index=>currentSelectedIndices.has(index)&&this.isPointInPolygon({x:this.points[index*2],y:this.points[index*2+1]},lassoPolygon));}
+this.handleSelection(selectedPoints);}
+isPointInPolygon(point,polygon){let isInside=false;const{x,y}=point;for(let i=0,j=polygon.length-1;i<polygon.length;j=i++){const xi=polygon[i].x,yi=polygon[i].y;const xj=polygon[j].x,yj=polygon[j].y;const intersect=((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi);if(intersect)isInside=!isInside;}
+return isInside;}
+setSelectionMode(enabled){this.selectionMode=enabled;this.datamap.deckgl.setProps({controller:{dragPan:!this.selectionMode,dragRotate:!this.selectionMode,},getCursor:({isDragging})=>this.selectionMode?"crosshair":(isDragging?"grabbing":"grab"),});if(!enabled){this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);}}
+getSpatialCoordinates(screenX,screenY){const viewport=this.datamap.deckgl.viewManager.getViewports()[0];return viewport.unproject([screenX,screenY]);}
+initEventListeners(){document.addEventListener('keydown',(e)=>{if(e.key==='Shift'&&!this.selectionMode){this.setSelectionMode(true);}});document.addEventListener('keyup',(e)=>{if(e.key==='Shift'&&this.selectionMode){this.setSelectionMode(false);}});this.datamap.container.addEventListener('mousedown',(e)=>{if(this.selectionMode){const[x,y]=this.getSpatialCoordinates(e.clientX,e.clientY);this.lassoPolygon=[{x,y}];}});this.datamap.container.addEventListener('mousemove',(e)=>{if(this.selectionMode&&this.lassoPolygon.length>0){const[x,y]=this.getSpatialCoordinates(e.clientX,e.clientY);this.lassoPolygon.push({x,y});this.drawLasso(this.lassoPolygon);}});this.datamap.container.addEventListener('mouseup',(e)=>{if(this.selectionMode&&this.lassoPolygon.length>0){const[x,y]=this.getSpatialCoordinates(e.clientX,e.clientY);this.lassoPolygon.push({x,y});this.onLassoComplete(this.lassoPolygon);this.lassoPolygon=[];}});}}
+  </script>
+  <script>
+    Array.prototype.pushAll=function(other){if(other.length<16384){this.push(...other);}else{for(let i=0;i<other.length;i++){this.push(other[i]);}}}
+class QuadTree{constructor(boundary,capacity){this.boundary=boundary;this.capacity=capacity;this.points=[];this.divided=false;}
+subdivide(){const x=this.boundary.x;const y=this.boundary.y;const w=this.boundary.width/2;const h=this.boundary.height/2;const ne=new QuadTree({x:x+w,y:y,width:w,height:h},this.capacity);const nw=new QuadTree({x:x,y:y,width:w,height:h},this.capacity);const se=new QuadTree({x:x+w,y:y+h,width:w,height:h},this.capacity);const sw=new QuadTree({x:x,y:y+h,width:w,height:h},this.capacity);this.northeast=ne;this.northwest=nw;this.southeast=se;this.southwest=sw;this.divided=true;}
+insert(points,index){const x=points[index*2];const y=points[index*2+1];if(!this.containsPoint(x,y)){return false;}
+if(this.points.length<this.capacity){this.points.push(index);return true;}
+if(!this.divided){this.subdivide();}
+return(this.northeast.insert(points,index)||this.northwest.insert(points,index)||this.southeast.insert(points,index)||this.southwest.insert(points,index));}
+query(range,points){const found=[];if(!this.intersects(range)){return found;}
+for(const index of this.points){const x=points[index*2];const y=points[index*2+1];if(this.rangeContainsPoint(range,x,y)){found.push(index);}}
+if(this.divided){found.pushAll(this.northeast.query(range,points));found.pushAll(this.northwest.query(range,points));found.pushAll(this.southeast.query(range,points));found.pushAll(this.southwest.query(range,points));}
+return found;}
+containsPoint(x,y){return(x>=this.boundary.x&&x<this.boundary.x+this.boundary.width&&y>=this.boundary.y&&y<this.boundary.y+this.boundary.height);}
+intersects(range){return!(range.x>this.boundary.x+this.boundary.width||range.x+range.width<this.boundary.x||range.y>this.boundary.y+this.boundary.height||range.y+range.height<this.boundary.y);}
+rangeContainsPoint(range,x,y){return(x>=range.x&&x<range.x+range.width&&y>=range.y&&y<range.y+range.height);}}
+  </script>
+  <script type="module">
+    async function simpleArrowParser(arrow_bytes) {
+      const table = await Arrow.tableFromIPC(arrow_bytes);
+      const result = {};
+      table.schema.fields.forEach((field) => {
+        result[field.name] = table.getChild(field.name).toArray();
+      });
+      return result;
+    }
+
+    function mergeTypedArrays(arrays) {
+        let totalLength = arrays.reduce((acc, arr) => acc + arr.length, 0);
+        let result = new arrays[0].constructor(totalLength);
+        let currentLength = 0;
+        for (let arr of arrays) {
+            result.set(arr, currentLength);
+            currentLength += arr.length;
+        }
+        return result;
+    }
+
+    function combineTypedTableChunks(tableChunks) {
+      tableChunks.sort((a, b) => a.chunkIndex - b.chunkIndex);
+      const combinedTable = {};
+      Object.keys(tableChunks[0].chunkData).forEach((key) => {
+        const arrays = tableChunks.map((chunk) => chunk.chunkData[key]);
+        combinedTable[key] = mergeTypedArrays(arrays);
+      });
+      return combinedTable;
+    }
+
+    function combineTableChunks(tableChunks) {
+      tableChunks.sort((a, b) => a.chunkIndex - b.chunkIndex);
+      const combinedTable = {};
+      Object.keys(tableChunks[0].chunkData).forEach((key) => {
+        const arrays = tableChunks.map((chunk) => chunk.chunkData[key]);
+        combinedTable[key] = arrays.flat();
+      });
+      return combinedTable;
+    }
+    if (!("CompressionStream" in window)) {
+      throw new Error(
+        "Your browser doesn't support the Compression Streams API " +
+          "https://developer.mozilla.org/docs/Web/API/Compression_Streams_API#browser_compatibility",
+      );
+    }
+
+    
+    const currentURL = self.location.pathname;
+    const directoryPath = currentURL.substring(0, currentURL.lastIndexOf('/') + 1);
+    const originURL = self.location.origin + directoryPath;
+
+    const pointDataEncoded = [
+      `${originURL}/datamapplot_point_data_0.zip`,
+      `${originURL}/datamapplot_point_data_1.zip`,
+      `${originURL}/datamapplot_point_data_2.zip`,
+      `${originURL}/datamapplot_point_data_3.zip`,
+      `${originURL}/datamapplot_point_data_4.zip`,
+      `${originURL}/datamapplot_point_data_5.zip`,
+      ];
+    const hoverDataEncoded = [
+      `${originURL}/datamapplot_meta_data_0.zip`,
+      `${originURL}/datamapplot_meta_data_1.zip`,
+      `${originURL}/datamapplot_meta_data_2.zip`,
+      `${originURL}/datamapplot_meta_data_3.zip`,
+      `${originURL}/datamapplot_meta_data_4.zip`,
+      `${originURL}/datamapplot_meta_data_5.zip`,
+      ];
+    const labelDataEncoded = [`${originURL}/datamapplot_label_data.zip`];
+    
+    const histogramBinDataEncoded = [`${originURL}/datamapplot_histogram_bin_data.zip`];
+    const histogramIndexDataEncoded = [`${originURL}/datamapplot_histogram_index_data.zip`];
+    
+
+    // Blob for the parsing worker
+    const parsingWorkerBlob = new Blob([`
+      self.onmessage = async function(event) {
+        const { encodedData, JSONParse } = event.data;
+        async function decompressFile(filename) {
+          try {
+            const response = await fetch(filename);
+            if (!response.ok) {
+              throw new Error(\`HTTP error! status: \${response.status}\`);
+            }
+            const reader = response.body
+              .pipeThrough(new DecompressionStream("gzip"))
+              .getReader();
+
+            let chunks = [];
+            let totalSize = 0;
+
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) {
+                break;
+              }
+              chunks.push(value);
+              totalSize += value.length;
+            }
+
+            // Concatenate chunks into a single Uint8Array
+            const decompressedData = new Uint8Array(totalSize);
+            let position = 0;
+            for (const chunk of chunks) {
+              decompressedData.set(chunk, position);
+              position += chunk.length;
+            }
+
+            return decompressedData;
+          } catch (error) {
+            console.error('Decompression failed:', error);
+            throw error;
+          }
+        }
+        let processedCount = 0;
+        const decodedData = encodedData.map(async (file, i) => {
+          const binaryData = await decompressFile(file);
+          processedCount += 1;
+          self.postMessage({ type: "progress", progress: Math.round(((processedCount) / encodedData.length) * 95) });
+
+          if (JSONParse) {
+            const parsedData = JSON.parse(new TextDecoder("utf-8").decode(binaryData));
+            return { chunkIndex: i, chunkData: parsedData };
+          } else {
+            return { chunkIndex: i, chunkData: binaryData };
+          }
+        });
+        self.postMessage({ type: "data", data: await Promise.all(decodedData) });
+      }
+    `], { type: 'application/javascript' });
+    const workerUrl = URL.createObjectURL(parsingWorkerBlob);
+    const searchItemId = "text-search";
+    const histogramItemId = "d3histogram-container";
+    const selectionItemId = "lasso-select";
+    const searchItem = document.getElementById(searchItemId);
+    let histogramItem = null;
+    
+    const container = document.getElementById('deck-container');
+
+    const labelDataWorker = new Worker(workerUrl);
+    const pointDataWorker = new Worker(workerUrl);
+    const metaDataWorker = new Worker(workerUrl);
+    
+    const histogramBinDataWorker = new Worker(workerUrl);
+    const histogramIndexDataWorker = new Worker(workerUrl);
+    const datamap = new DataMap({
+      container: container,
+      bounds: [-7.375860176086426, 17.358437023162843, -7.529216670989991, 17.190872573852538],
+      searchItemId: searchItemId,
+      lassoSelectionItemId: selectionItemId,      
+    });
+
+    function updateProgressBar(id, progress) {
+      const progressBar = document.querySelector(`#${id} .datamapplot-progress-bar-fill`);
+      const progressText = document.querySelector(`#${id} .datamapplot-progress-bar-text`);
+      progressBar.style.width = `${progress}%`;
+      progressText.textContent = `${id.replace('-progress', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}: ${progress}%`;
+    }
+
+    function checkAllDataLoaded() {
+      const progressBars = document.querySelectorAll('.datamapplot-progress-bar-fill');
+      const allLoaded = Array.from(progressBars).every(bar => bar.style.width === '100%');
+      if (allLoaded) {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("progress-container").style.display = "none";
+      }
+    }
+
+    function loadPointDataLayer() {
+      pointDataWorker.postMessage({encodedData: pointDataEncoded, JSONParse: false});
+
+      pointDataWorker.onmessage = async function(event) {
+        if (event.data.type === "progress") {
+          updateProgressBar('point-data-progress', event.data.progress);
+        } else {
+          const { data } = event.data;
+          
+          const chunkArray = data.map(async ({ chunkIndex, chunkData }) => {
+            return {chunkIndex: chunkIndex, chunkData: await simpleArrowParser(chunkData)};
+          });
+          const pointData = await Promise.all(chunkArray).then(combineTypedTableChunks);
+          
+          datamap.addPoints(
+            pointData,
+            {
+              pointSize: -1,
+              pointOutlineColor: [250, 250, 250, 128],
+              pointLineWidth: 0,
+              pointHoverColor: [170, 0, 0, 187],
+              pointLineWidthMaxPixels: 3,
+              pointLineWidthMinPixels: 0.001,
+              pointRadiusMaxPixels: 16,
+              pointRadiusMinPixels: 0.2,
+            }
+          );
+
+          document.getElementById("loading").style.display = "none";
+          updateProgressBar('point-data-progress', 100);
+          checkAllDataLoaded();
+          /* Lasso Selection */
+          const lassoSelector = new LassoSelectionTool(
+            datamap,
+            lassoSelectionCallback
+          );
+          }
+      };
+    }
+
+    function loadLabelDataLayer() {
+      labelDataWorker.postMessage({encodedData: labelDataEncoded, JSONParse: true});
+
+      labelDataWorker.onmessage = async function(event) {
+        if (event.data.type === "progress") {
+          updateProgressBar('label-data-progress', event.data.progress);
+        } else {
+          const { data } = event.data;
+          const labelData = data[0].chunkData;
+          datamap.addLabels(labelData, {
+            labelTextColor: d => [d.r, d.g, d.b],
+            textMinPixelSize: 18,
+            textMaxPixelSize: 36,
+            textOutlineWidth: 8,
+            textOutlineColor: [238, 238, 238, 221],
+            textBackgroundColor: [255, 255, 255, 64],
+            fontFamily: "Cinzel",
+            fontWeight: 600,
+            lineSpacing: 0.95,
+            textCollisionSizeScale: 3,
+          });
+
+          
+          datamap.addBoundaries(labelData, {
+            clusterBoundaryLineWidth: 0.2,
+          });
+          
+          document.getElementById("loading").style.display = "none";
+          updateProgressBar('label-data-progress', 100);
+          checkAllDataLoaded();
+        }
+      };
+    }
+
+    function loadMetaData() {
+      metaDataWorker.postMessage({encodedData: hoverDataEncoded, JSONParse: true});
+
+      metaDataWorker.onmessage = async function(event) {
+        if (event.data.type === "progress") {
+          updateProgressBar('meta-data-progress', event.data.progress);
+        } else {
+          const { data } = event.data;
+          const hoverData = combineTableChunks(data);
+          datamap.addMetaData(hoverData, {
+            tooltipFunction: ({index}) => hoverData.hover_text[index],
+            onClickFunction: ({index, picked}, event) => { if (picked) {window.open(`${hoverData.url[index]}`) } },
+            searchField: "hover_text",
+          });
+
+          
+          function debounce(func, timeout = 250){
+              let timer;
+              return (...args) => {
+                  clearTimeout(timer);
+                  timer = setTimeout(() => { func.apply(this, args); }, timeout);
+              };
+          }
+
+          /* Search */
+          searchItem.addEventListener("input", debounce(event => datamap.searchText(event.target.value)));
+          updateProgressBar('meta-data-progress', 100);
+          checkAllDataLoaded();
+        }
+      };
+    }
+
+    
+    function loadHistogramBinData() {
+      return new Promise((resolve, reject) => {
+        histogramBinDataWorker.postMessage({encodedData: histogramBinDataEncoded, JSONParse: true});
+
+        histogramBinDataWorker.onmessage = async function(event) {
+          if (event.data.type === "progress") {
+            updateProgressBar('histogram-bin-data-progress', event.data.progress);
+          } else {
+            const { data } = event.data;
+            const histogramBinData = data[0].chunkData;
+            resolve(histogramBinData);
+            updateProgressBar('histogram-bin-data-progress', 100);
+            checkAllDataLoaded();
+          }
+        };
+      });
+    }
+
+    function loadHistogramIndexData() {
+      return new Promise((resolve, reject) => {
+        histogramIndexDataWorker.postMessage({encodedData: histogramIndexDataEncoded, JSONParse: false});
+
+        histogramIndexDataWorker.onmessage = async function(event) {
+          if (event.data.type === "progress") {
+            updateProgressBar('histogram-index-data-progress', event.data.progress);
+          } else {
+            const { data } = event.data;
+            const histogramIndexData = simpleArrowParser(data[0].chunkData);
+            resolve(histogramIndexData);
+            updateProgressBar('histogram-index-data-progress', 100);
+            checkAllDataLoaded();
+          }
+        };
+      });
+    }
+
+    function loadHistogramData() {
+      const chartSelectionCallback = chartSelectedIndices => {
+        // Update data manager
+        if (chartSelectedIndices === null) {
+          datamap.removeSelection(histogramItemId);
+        } else {
+          datamap.addSelection(chartSelectedIndices, histogramItemId);
+        }
+      };
+
+      Promise.all([loadHistogramBinData(), loadHistogramIndexData()]).then(([histogramBinData, histogramIndexData]) => {
+        const histogramData = { rawBinData: histogramBinData, rawIndexData: histogramIndexData };
+        histogramItem = D3Histogram.create({
+          data: histogramData, 
+          chartContainerId: histogramItemId,
+          chartWidth: 384,
+          chartHeight: 96,
+          chartSelectionCallback
+        });
+
+        datamap.connectHistogram(histogramItem);
+      });
+    }
+    loadPointDataLayer();
+    loadLabelDataLayer();
+    loadMetaData();
+    loadHistogramData();
+    
+    
+const _STOPWORDS = new Set(['until', 'somewhere', 'beside', 'fill', 'hence', 'next', 'everywhere', 'up', 'without', 'so', 'etc', 'otherwise', 'because', 'seem', 'therein', 'fire', 'serious', 'already', 'go', 'none', 'us', 'along', 'have', 'above', 'do', 'only', 'must', 'off', 'several', 'an', 're', 'beyond', 'was', 'often', 'else', 'fifty', 'others', 'four', 'is', 'via', 'another', 'what', 'could', 'detail', 'toward', 'thereby', 'mine', 'his', 'now', 'as', 'a', 'per', 'will', 'please', 'sometime', 'which', 'mostly', 'give', 'thereafter', 'during', 'me', 'below', 'can', 'made', 'three', 'two', 'beforehand', 'against', 'whereby', 'take', 'behind', 'anyway', 'bottom', 'who', 'found', 'thin', 'yours', 'are', 'him', 'anyone', 'top', 'done', 'whoever', 'eight', 'her', 'and', 'our', 'out', 'too', 'although', 'became', 'had', 'becoming', 'once', 'ie', 'someone', 'latter', 'hers', 'somehow', 'each', 'interest', 'anyhow', 'how', 'fifteen', 'either', 'find', 'when', 'noone', 'every', 'between', 'many', 'amount', 'nobody', 'she', 'except', 'bill', 'after', 'mill', 'get', 'might', 'elsewhere', 'whole', 'though', 'side', 'nine', 'for', 'under', 'cry', 'from', 'thru', 'never', 'wherever', 'with', 'around', 'amoungst', 'nothing', 'ltd', 'its', 'by', 'wherein', 'about', 'thence', 'eg', 'myself', 'it', 'latterly', 'de', 'twelve', 'themselves', 'hasnt', 'onto', 'hereupon', 'ever', 'over', 'been', 'where', 'also', 'move', 'whereas', 'due', 'may', 'through', 'more', 'cannot', 'seems', 'inc', 'herself', 'were', 'meanwhile', 'i', 'be', 'front', 'well', 'of', 'least', 'forty', 'six', 'rather', 'here', 'ten', 'always', 'become', 'perhaps', 'sometimes', 'being', 'they', 'indeed', 'the', 'no', 'nevertheless', 'whether', 'everything', 'therefore', 'if', 'whereafter', 'five', 'there', 'still', 'further', 'not', 'down', 'show', 'at', 'besides', 'than', 'much', 'cant', 'put', 'seemed', 'sincere', 'am', 'moreover', 'something', 'upon', 'while', 'amongst', 'afterwards', 'into', 'or', 'anything', 'see', 'this', 'keep', 'one', 'most', 'across', 'he', 'both', 'nowhere', 'neither', 'hundred', 'your', 'other', 'formerly', 'last', 'seeming', 'within', 'sixty', 'even', 'describe', 'few', 'herein', 'among', 'whenever', 'in', 'co', 'anywhere', 'my', 'itself', 'these', 'back', 'whom', 'since', 'towards', 'yet', 'former', 'whatever', 'hereby', 'any', 'those', 'third', 'thus', 'yourselves', 'before', 'thick', 'all', 'almost', 'alone', 'couldnt', 'whose', 'enough', 'such', 'should', 'ours', 'whence', 'has', 'on', 'himself', 'eleven', 'then', 'call', 'name', 'yourself', 'them', 'that', 'why', 'however', 'less', 'full', 'to', 'whither', 'we', 'you', 'but', 'again', 'empty', 'together', 'some', 'same', 'own', 'becomes', 'their', 'un', 'system', 'very', 'first', 'throughout', 'part', 'everyone', 'whereupon', 'ourselves', 'nor', 'namely', 'thereupon', 'twenty', 'would', 'hereafter', 'con']);
+const _ROTATIONS = [0, -90, 90, -45, 45, -30, 30, -60, 60, -15, 15, -75, 75, -7.5, 7.5, -22.5, 22.5, -52.5, 52.5, -37.5, 37.5, -67.5, 67.5];
+const wordCloudSvg = d3.select("#word-cloud").append("svg")
+    .attr("width", 640)
+    .attr("height", 480)
+    .append("g")
+    .attr("transform", "translate(" + 640 / 2 + "," + 480 / 2 + ")");
+const wordCloudItem = document.getElementById("word-cloud");
+
+function wordCounter(textItems) {
+    const words = textItems.join(' ').toLowerCase().split(/\s+/);
+    const wordCounts = new Map();
+    words.forEach(word => {
+        wordCounts.set(word, (wordCounts.get(word) || 0) + 1);
+    });
+    _STOPWORDS.forEach(stopword => wordCounts.delete(stopword));
+    const result = Array.from(wordCounts, ([word, frequency]) => ({ text: word, size: Math.sqrt(frequency) }))
+                        .sort((a, b) => b.size - a.size).slice(0, 512);
+    const maxSize = Math.max(...(result.map(x => x.size)));
+    return result.map(({text, size}) => ({ text: text, size: (size / maxSize)}));
+}
+
+function generateWordCloud(words) {
+  const width = 640;
+  const height = 480;
+
+  const colorScale = d3.scaleSequential(d3.interpolateYlGnBu).domain([0, width / 10]);
+
+  // Configure a cloud layout
+  const layout = d3.layout.cloud()
+    .size([width, height])
+    .words(words.map(d => ({text: d.text, size: d.size * width / 10})))
+    .padding(1)
+    .rotate(() => _ROTATIONS[~~(Math.random() * 4)])
+    .font("Cinzel")
+    .fontSize(d => d.size)
+    .fontWeight(d => Math.max(300, Math.min(d.size * 9000 / width, 900)))
+    .on("end", draw);
+
+  layout.start();
+
+  function draw(words) {
+    const t = d3.transition().duration(500);
+    
+    // Update existing words
+    const text = wordCloudSvg.selectAll("text")
+      .data(words, d => d.text);
+    
+    // Remove old words
+    text.exit()
+      .transition(t)
+      .attr("fill-opacity", 0)
+      .attr("font-size", 1)
+      .remove();
+    // Add new words
+    text.enter()
+      .append("text")
+      .attr("text-anchor", "middle")
+      .attr("fill-opacity", 0)
+      .attr("font-size", 1)
+      .attr("font-family", "Cinzel")
+      .text(d => d.text)
+      .merge(text) // Merge enter and update selections
+      .transition(t)
+      .attr("transform", d => "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")")
+      .attr("fill-opacity", 1)
+      .attr("font-size", d => d.size)
+      .attr("font-weight", d => Math.max(300, Math.min(d.size * 9000 / width, 900)))
+      .attr("fill", d => colorScale(d.size));
+  }
+}
+
+function lassoSelectionCallback(selectedPoints) {
+    if (selectedPoints.length > 0) {
+        $(wordCloudItem).animate({height:'show'}, 250);
+    } else {
+        $(wordCloudItem).animate({height:'hide'}, 250);
+    }
+    let selectedText;
+    if (datamap.metaData) {
+        selectedText = selectedPoints.map(i => datamap.metaData.hover_text[i]);
+    } else {
+        selectedText = ["Meta data still loading ..."];
+    }
+    const wordCounts = wordCounter(selectedText);
+    generateWordCloud(wordCounts);
+}
+
+    </script>
+</html>
