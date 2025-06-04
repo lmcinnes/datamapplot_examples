@@ -9,11 +9,11 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
-<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
-<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+    <link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
+<link rel="preload" href="https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf" as="font" crossorigin="anonymous" type="font/ttf" />
 <style>
-b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 400;\n  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf) format('truetype');\n}\n@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 700;\n  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf) format('truetype');\n}\n@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 900;\n  src: url(https://fonts.gstatic.com/s/cinzel/v23/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf) format('truetype');\n}\n"
+b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 400;\n  src: url(https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-tbnfY3lCA.ttf) format('truetype');\n}\n@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 700;\n  src: url(https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-jHgfY3lCA.ttf) format('truetype');\n}\n@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 900;\n  src: url(https://fonts.gstatic.com/s/cinzel/v25/8vIU7ww63mVu7gtR-kwKxNvkNOjw-n_gfY3lCA.ttf) format('truetype');\n}\n"
 </style>
 
     <link
@@ -25,15 +25,17 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
       rel="stylesheet"
     />
     
+    <script src="https://unpkg.com/d3@latest/dist/d3.min.js"></script>
+    <script src="https://unpkg.com/apache-arrow@latest/Arrow.es2015.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="https://unpkg.com/d3-cloud@1.2.7/build/d3.layout.cloud.js"></script>
     <script src="https://unpkg.com/deck.gl@latest/dist.min.js"></script>
-    <script src="https://unpkg.com/apache-arrow@latest/Arrow.es2015.min.js"></script>
-    <script src="https://unpkg.com/d3@latest/dist/d3.min.js"></script>
-    <script src="https://unpkg.com/jquery@3.7.1/dist/jquery.min.js"></script>
     <style>
       .content-wrapper{top:0;left:0;width:100%;height:100%;z-index:1;padding:8px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;min-height:calc(100vh - 16px);pointer-events:none}.stack{display:flex;flex-direction:column;gap:4px;padding:4px;pointer-events:none;max-height:50vh;overflow-y:visible}.top-left{grid-column:1;grid-row:1;justify-self:start;align-self:start;align-items:start}.bottom-left{grid-column:1;grid-row:2;justify-self:start;align-self:end;align-items:start;display:flex;flex-direction:column-reverse;transform:scaleY(-1);z-index:2}.top-right{grid-column:2;grid-row:1;justify-self:end;justify-items:end;align-self:start;align-items:end}.bottom-right{grid-column:2;grid-row:2;justify-self:end;justify-items:end;align-self:end;align-items:end;display:flex;flex-direction:column-reverse;transform:scaleY(-1)}.stack.bottom-left .stack-box{transform:scaleY(-1)}.stack.bottom-right .stack-box{transform:scaleY(-1)}#loading{width:100%;height:100%;top:0px;left:0px;position:absolute;display:block;z-index:99}#loading-image{position:absolute;top:45%;left:47.5%;z-index:100}#title-container{top:0;left:0}
     </style><style>
       .datamapplot-progress-container{position:absolute;bottom:0;left:50%;transform:translate(-50%,0);width:512px;z-index:101}.datamapplot-progress-bar{width:100%;background-color:#e0e0e044;padding:3px;border-radius:6px;box-shadow:inset 0 1px 3px rgba(128,128,128,.2);margin-bottom:10px}.datamapplot-progress-bar-fill{display:block;height:12px;background-color:#659cef;border-radius:4px;transition:width 500ms ease-in-out}.datamapplot-progress-bar-text{color:white;text-align:center;line-height:12px;font-size:10px;overflow-x:visible;white-space:nowrap;vertical-align:top}
+    </style><style>
+      #colormap-selector-container{position:relative;z-index:100}.color-map-dropdown{background-color:inherit;z-index:100}.color-map-selected{display:flex;align-items:center;padding:10px;border:1px solid #ccc;border-radius:8px;cursor:pointer;width:100%;box-sizing:border-box;position:relative;z-index:100}.color-map-options{position:fixed;bottom:100%;left:0;right:0;border:1px solid #ccc;border-radius:4px;box-shadow:0 2px 5px rgba(0,0,0,0.1);max-height:500px;overflow-y:auto;display:none;background-color:#ffffff77;backdrop-filter:blur(6px);box-sizing:border-box;z-index:101}.color-map-option{position:relative;display:flex;align-items:center;padding:10px;cursor:pointer;z-index:102;background-color:#ffffffee;backdrop-filter:blur(6px)}.color-map-option:hover{background-color:#ccccccee;backdrop-filter:blur(6px)}.color-swatch{display:inline-block;width:fit-content;height:20px;margin-right:10px;border-radius:4px}.color-swatch-box{display:inline-block;width:12px;height:12px;text-align:center;line-height:10px;cursor:pointer}.color-map-text{flex-grow:1}.colorbar-container{display:flex;align-items:center;width:fit-content;gap:4px;padding:10px;height:200px;margin:4px 16px 4px 16px}.color-legend-container{display:flex;align-items:left;width:fit-content;height:fit-content;gap:4px;padding:10px}.colorbar{width:10px;height:200px;position:relative}.colorbar-tick-container{position:relative;width:40px;height:200px}.colorbar-tick{position:absolute;display:flex;align-items:center;gap:4px;transform:translateY(-50%)}.colorbar-tick-line{width:8px;height:1px;background:#333}.colorbar-tick-label{font-size:12px}.legend-item{display:flex;align-items:left;gap:4px;padding:4px}.legend-label{font-size:12px}
     </style><style>
       #table-of-contents{display:block;height:fit-content;width:fit-content}#toc-body{overflow-y:auto;display:flex;flex-direction:column}#toc-body>.nested{display:block;padding-right:10px}#table-of-contents>.nested{display:block;padding-right:10px}.toc-container{display:flex;flex-direction:column}.toc-header{padding:0px 4px 4px 2em;border-bottom:1px solid #ddd;margin-bottom:4px;margin-top:-2em;display:flex;justify-content:space-between;align-items:center;flex-direction:row;text-wrap:nowrap;overflow:hidden}.nested{display:none;margin-left:20px;list-style-type:none;padding-inline-start:10px}.nested.active{display:block}#table-of-contents::-webkit-scrollbar{width:8px}#toc-body::-webkit-scrollbar-track{background:#f1f1f1}#toc-body::-webkit-scrollbar-thumb{background:#888;border-radius:4px}#toc-body::-webkit-scrollbar-thumb:hover{background:#555}.caret{cursor:pointer;user-select:none;padding:2px 4px;border-radius:3px;opacity:0.4;transition:opacity 0.3s ease}.caret::before{content:"\25B6";display:inline-block;margin-right:6px}.caret-down::before{transform:rotate(90deg)}.caret.unlabeled::before{content:"\25b7"}.bullet{cursor:pointer;user-select:none;padding:2px 4px;border-radius:3px;opacity:0.4;transition:opacity 0.3s ease}.bullet::before{content:"\25CF";display:inline-block;margin-right:6px}.bullet.unlabeled::before{content:"\25CB"}li{list-style-type:none;margin:5px 0}.toc-btn{border:none;color:white;padding:2px 4px;border-radius:5px;cursor:pointer;margin-right:5px}.toc-btn:hover{background-color:RoyalBlue}.toc-label{border:none;cursor:pointer}.toc-label:hover{text-decoration:underline}.expand-all-btn{padding:4px 8px;cursor:pointer;border:none;border-radius:8px;background:#3ba5e7;color:white}.expand-all-btn:hover{text-decoration:underline}.highlighted{opacity:1.0;transition:opacity 0.3s ease}.toc-close-btn{font-size:1.5em;font-weight:bold;border:none;padding:0px 02px;cursor:pointer;transform:rotate(270deg);transition:transform 0.25s ease-in-out;margin:-2px;background:none;color:inherit}.toc-close-btn.closed{font-size:1.5em;font-weight:bold;border:none;padding:0px 0px;cursor:pointer;transition:transform 0.25s ease-in-out;transform:rotate(90deg);margin:-2px;background:none;color:inherit}
     </style>
@@ -115,9 +117,6 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
       }
       
 #info-box {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: fit-content;
     height: fit-content;
     z-index: 10;
@@ -149,7 +148,7 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow-y: auto;
     pointer-events: none;
 }
 
@@ -167,13 +166,14 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
 }
 
 #info-box.expanded {
-    width: 300px;
+    width: 600px;
     height: auto;
     min-height: 100px;
     max-height: 800px;
     border: 1px solid #ccc;
     align-items: flex-start;
     justify-content: flex-start;
+    overflow-y: auto;
 }
 
 #info-box.expanded #info-icon {
@@ -238,10 +238,14 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
         </div>
         <div class="stack top-right">
           
+          <div id="legend-container" class="container-box stack-box" style="display:none;">
+          </div>
+          
         </div>
         <div class="stack bottom-right">
         </div>
-        <div class="stack bottom-left"></div>
+        <div class="stack bottom-left">
+          <div id="colormap-selector-container" class="container-box stack-box"></div></div>
       </div>
       
       <div id="logo-container" class="container-box" style="position: fixed; z-index: 0; bottom: 0; right: 0;">
@@ -265,37 +269,13 @@ b"@font-face {\n  font-family: 'Cinzel';\n  font-style: normal;\n  font-weight: 
           <span class="datamapplot-progress-bar-text">Meta Data: 0%</span>
         </span>
       </div>
+      <div id="color-data-progress" class="datamapplot-progress-bar">
+        <span class="datamapplot-progress-bar-fill" style="width: 0%;">
+          <span class="datamapplot-progress-bar-text">Colormap Data: 0%</span>
+        </span>
+      </div>
     </div>
-     
-<div id="info-box" class="container-box more-opaque">
-    <div id="info-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-      </svg>    
-    </div>
-    <div id="info-content">
-        <h3>About This Data Map</h3>
-        <p>
-            This page proivides an explorable map of English Wikipedia. It was built
-            using <a href="https://huggingface.co/datasets/Cohere/wikipedia-2023-11-embed-multilingual-v3">embeddings 
-            provided by Cohere</a>, openTSNE, <a href="https://github.com/TutteInstitute/toponymy">Toponymy</a>,
-            and <a href="https://github.com/TutteInstitute/datamapplot">DataMapPlot</a>. It exists primarily as a showcase for some of the
-            capabilities provided by DataMapPlot and the Toponymy library.
-        </p>
-        <p>
-            Topic labels were generated automatically using Toponymy and the Cohere Command-R LLM.
-        </p>
-        <p>
-          Click and drag to pan, use mouse-wheel or pinch to zoom. Clicking on a point will take you to the associated page.<br/>
-          The topic tree allows for navigation to specific topics -- expand topics by clicking on the triangle to reveal more details sub-topics.
-          Click on a topic name to zoom to that topic on the map.<br/>
-          Hold down shift and click-drag to create a selection, which will generate a word-cloud from the content of selected pages.
-          Select an empty area to clear the word-cloud/selection.
-        </p>
-        </div>
-</div>
-</body>
+    </body>
   <script>
     LAYER_ORDER=['imageLayer','dataPointLayer','boundaryLayer','labelLayer'];function getLayerIndex(object){return LAYER_ORDER.indexOf(object.id);}
 function isFontLoaded(fontName){return document.fonts.check(`12px "${fontName}"`);}
@@ -381,6 +361,46 @@ return found;}
 containsPoint(x,y){return(x>=this.boundary.x&&x<this.boundary.x+this.boundary.width&&y>=this.boundary.y&&y<this.boundary.y+this.boundary.height);}
 intersects(range){return!(range.x>this.boundary.x+this.boundary.width||range.x+range.width<this.boundary.x||range.y>this.boundary.y+this.boundary.height||range.y+range.height<this.boundary.y);}
 rangeContainsPoint(range,x,y){return(x>=range.x&&x<range.x+range.width&&y>=range.y&&y<range.y+range.height);}}
+  </script>
+  <script>
+    class Colorbar{constructor(container,options={}){this.container=container;this.options={width:options.width||40,height:options.height||300,min:options.min||0,max:options.max||100,numTicks:options.numTicks||5,colormap:options.colormap||['blue','red'],label:options.label||'',dateFormat:options.dateFormat||'short'};this.isDateScale=this.options.min instanceof Date||typeof this.options.min==='string'&&!isNaN(Date.parse(this.options.min));if(this.isDateScale){this.options.min=this.ensureDate(this.options.min);this.options.max=this.ensureDate(this.options.max);this.analyzeDateTimeRange();}else{this.analyzeNumericRange();}
+this.render();}
+analyzeDateTimeRange(){const{min,max}=this.options;const rangeMs=max.getTime()-min.getTime();const rangeHours=rangeMs/(1000*60*60);const rangeDays=rangeHours/24;const rangeMonths=rangeDays/30.44;const rangeYears=rangeMonths/12;if(rangeYears>=2){this.dateTimeFormat={year:'numeric',month:'short'};}else if(rangeMonths>=2){this.dateTimeFormat={month:'short',day:'numeric'};}else if(rangeDays>=2){this.dateTimeFormat={month:'short',day:'numeric',hour:'2-digit'};}else if(rangeHours>=2){this.dateTimeFormat={hour:'2-digit',minute:'2-digit'};}else{this.dateTimeFormat={hour:'2-digit',minute:'2-digit',second:'2-digit'};}}
+analyzeNumericRange(){const{min,max}=this.options;this.isIntegerData=Number.isInteger(min)&&Number.isInteger(max);const maxAbs=Math.max(Math.abs(min),Math.abs(max));const minAbs=Math.min(Math.abs(min),Math.abs(max));this.useScientific=maxAbs>=1e5||(minAbs>0&&minAbs<=1e-4);if(!this.isIntegerData&&!this.useScientific){const range=max-min;if(range<1){this.decimals=3;}else if(range<10){this.decimals=2;}else{this.decimals=1;}}}
+ensureDate(value){if(value instanceof Date)return value;return new Date(value);}
+formatNumber(value){if(this.isIntegerData){return Math.round(value).toString();}
+if(this.useScientific){return value.toExponential(2);}
+if(Number.isInteger(value)){return value.toString();}
+return value.toFixed(this.decimals);}
+formatValue(value){if(this.isDateScale){const date=value instanceof Date?value:new Date(value);if(this.options.dateFormat){return date.toLocaleDateString(undefined,this.options.dateFormat);}else{return date.toLocaleString(undefined,this.dateTimeFormat);}}
+return this.formatNumber(value);}
+createColorScale(){const{colormap}=this.options;if(colormap.length===0)return'none';if(colormap.length===1)return colormap[0];return`linear-gradient(to top, ${colormap.join(', ')})`;}
+generateTicks(){const{min,max,numTicks}=this.options;const ticks=[];for(let i=numTicks-1;i>=0;i--){let value;if(this.isDateScale){const minTime=min.getTime();const maxTime=max.getTime();const timeRange=maxTime-minTime;value=new Date(minTime+(i/(numTicks-1))*timeRange);}else{value=min+(i/(numTicks-1))*(max-min);}
+const position=100-(i/(numTicks-1)*100);ticks.push({value:value,formattedValue:this.formatValue(value),position});}
+return ticks;}
+render(){const wrapper=document.createElement('div');wrapper.className='colorbar-container';const colorbar=document.createElement('div');colorbar.className='colorbar';colorbar.style.background=this.createColorScale();const tickContainer=document.createElement('div');tickContainer.className='colorbar-tick-container';const ticks=this.generateTicks();ticks.forEach(tick=>{const tickElement=document.createElement('div');tickElement.className='colorbar-tick';tickElement.style.top=`${tick.position}%`;const tickLine=document.createElement('div');tickLine.className='colorbar-tick-line';const tickLabel=document.createElement('div');tickLabel.className='colorbar-tick-label';tickLabel.textContent=tick.formattedValue;tickElement.appendChild(tickLine);tickElement.appendChild(tickLabel);tickContainer.appendChild(tickElement);});if(this.options.label){const label=document.createElement('div');label.style.writingMode='vertical-rl';label.style.transform='rotate(180deg)';label.style.marginRight='8px';label.textContent=this.options.label;wrapper.appendChild(label);}
+wrapper.appendChild(colorbar);wrapper.appendChild(tickContainer);this.container.appendChild(wrapper);}}
+function convertRGBtoObj(colorString){const rgbKeys=['r','g','b','a'];let rgbObj={};let color=colorString.replace(/^rgba?\(|\s+|\)$/g,'').split(',');for(let i in rgbKeys)
+rgbObj[rgbKeys[i]]=parseInt(color[i])||1;return rgbObj;}
+class ColorLegend{constructor(container,datamap,colorData,colorField,options={}){this.container=container;this.options={width:options.width||400,colormap:options.colormap||{"High":"blue","Low":"red"},label:options.label||''};this.datamap=datamap;this.colorData=colorData;this.colorField=colorField;this.selectedItems=new Set();this.legendItems=[];this.render();}
+render(){for(const[label,color]of Object.entries(this.options.colormap)){const legendItem=document.createElement('div');legendItem.className='legend-item';const colorBox=document.createElement('div');colorBox.className='color-swatch-box';colorBox.style.borderRadius="2px";colorBox.style.backgroundColor=color;const labelElement=document.createElement('div');labelElement.className='legend-label';labelElement.textContent=label;legendItem.appendChild(colorBox);legendItem.appendChild(labelElement);this.container.appendChild(legendItem);this.legendItems.push(legendItem);}
+this.container.addEventListener('click',(event)=>{const selection=event.srcElement.style.backgroundColor;if(selection){if(this.selectedItems.has(selection)){this.selectedItems.delete(selection);}else{this.selectedItems.add(selection);}
+const selectedIndices=[];this.selectedItems.forEach((color)=>{const selectedColor=convertRGBtoObj(color);for(let i=0;i<this.colorData[`${this.colorField}_r`].length;i++){;if(Math.abs(this.colorData[`${this.colorField}_r`][i]-selectedColor.r)<=1&&Math.abs(this.colorData[`${this.colorField}_g`][i]-selectedColor.g)<=1&&Math.abs(this.colorData[`${this.colorField}_b`][i]-selectedColor.b)<=1){selectedIndices.push(i);}}});if(this.selectedItems.size>0){this.datamap.addSelection(selectedIndices,"legend");this.legendItems.forEach((item)=>{if(this.selectedItems.has(item.children[0].style.backgroundColor)){item.style.opacity=1;}else{item.style.opacity=0.25;}});}else{this.datamap.removeSelection("legend");this.legendItems.forEach((item)=>{item.style.opacity=1;});}}});}}
+class ColormapSelectorTool{constructor(colorMaps,colorMapContainer,colorData,legendContainer,datamap,nColors=5){this.colorMaps=colorMaps;this.colorMapContainer=colorMapContainer;this.colorData=colorData;this.datamap=datamap;this.nColors=nColors;this.legendContainer=legendContainer;for(const colorMap of this.colorMaps){if(Object.hasOwn(colorMap,"nColors")){this.nColors=Math.max(this.nColors,colorMap.nColors);}}
+this.selectedColorMap=colorMaps[0];this.measureDiv=document.createElement("div");this.measureDiv.style.position="absolute";this.measureDiv.style.visibility="hidden";this.measureDiv.style.whiteSpace="nowrap";document.body.appendChild(this.measureDiv);const maxWidth=this.calculateMaxWidth();this.colorMapDropdown=document.createElement("div");this.colorMapDropdown.className="color-map-dropdown";this.colorMapDropdown.style.width=`${maxWidth}px`;const colorMapSelected=document.createElement("div");colorMapSelected.className="color-map-selected";this.selectedColorSwatch=document.createElement("span");this.selectedColorSwatch.className="color-swatch";this.selectedColorSwatch.id="selectedColorSwatch";colorMapSelected.appendChild(this.selectedColorSwatch);this.selectedColorMapText=document.createElement("span");this.selectedColorMapText.className="color-map-text";this.selectedColorMapText.id="selectedColorMapText";colorMapSelected.appendChild(this.selectedColorMapText);const downArrow=document.createElement("span");downArrow.className="dropdown-arrow";downArrow.innerHTML="▼";colorMapSelected.appendChild(downArrow);this.colorMapDropdown.appendChild(colorMapSelected);this.colorMapOptions=document.createElement("div");this.colorMapOptions.className="color-map-options";this.colorMapOptions.id="colorMapOptions";this.colorMapOptions.style.display='none';this.colorMapOptions.style.width=`${maxWidth}px`;this.colorMapDropdown.appendChild(this.colorMapOptions);this.colorMapContainer.appendChild(this.colorMapDropdown);this.colorMapContainer.style.width=`${maxWidth + 20}px`;this.colorMapDropdown.addEventListener('click',(e)=>{this.colorMapOptions.style.display=this.colorMapOptions.style.display==='none'?'block':'none'});this.updateSelectedColorMap();this.populateColorMapOptions();this.populateLegends();document.body.removeChild(this.measureDiv);}
+calculateMaxWidth(){let maxWidth=0;this.measureDiv.className="color-map-option";for(const colorMap of this.colorMaps){this.measureDiv.innerHTML=`${this.createColorSwatch(colorMap.colors)} <span class="color-map-text">${colorMap.description}</span>`;const width=this.measureDiv.offsetWidth+40;maxWidth=Math.max(maxWidth,width);}
+return maxWidth;}
+createColorSwatch(colors,categorical=false){const n=Math.min(this.nColors,colors.length);var result='<span class="color-swatch">'
+if(colors.length>16&&!categorical){const stepSize=(colors.length-1)/(n-1);for(let i=0;i<colors.length;i+=stepSize){result+=`<span class="color-swatch-box"; style="background: ${colors[Math.round(i)]}"></span>`}}else{for(let i=0;i<n;i++){result+=`<span class="color-swatch-box"; style="background: ${colors[Math.round(i)]}"></span>`}}
+result+='</span>'
+return result;}
+handleColorMapSelection(colorMap){this.selectedColorMap=colorMap;this.updateSelectedColorMap();if(colorMap.field==='none'){this.datamap.resetPointColors();this.legendContainer.style.display='none';}else{this.datamap.recolorPoints(this.colorData,colorMap.field);if(((colorMap.kind==="categorical")&&((colorMap.colors.length<=20)||colorMap.showLegend)&&Object.hasOwn(colorMap,"colorMapping"))||(colorMap.kind==="continuous")||(colorMap.kind==="datetime")){this.legendContainer.style.display='block';for(const key in this.legends){this.legends[key].style.display='none';}
+this.legends[colorMap.field].style.display='block';}else{this.legendContainer.style.display='none';}}}
+updateSelectedColorMap(){this.selectedColorSwatch.innerHTML=(this.createColorSwatch(this.selectedColorMap.colors,this.selectedColorMap.kind==="categorical"));this.selectedColorMapText.innerHTML=this.selectedColorMap.description;}
+populateColorMapOptions(){for(const colorMap of this.colorMaps){const colorMapOption=document.createElement("div");colorMapOption.className="color-map-option";colorMapOption.addEventListener('click',(event)=>{this.handleColorMapSelection(colorMap)});colorMapOption.innerHTML=`${this.createColorSwatch(colorMap.colors, colorMap.kind === "categorical")} <span class="color-map-text">${colorMap.description}</span>`;this.colorMapOptions.appendChild(colorMapOption);}}
+populateLegends(){this.legends={};for(const colorMap of this.colorMaps){if(colorMap.field==='none'){continue;}
+this.legends[colorMap.field]=document.createElement("div");this.legends[colorMap.field].className="color-legend-container";this.legends[colorMap.field].style.display='none';if((colorMap.kind==="categorical")&&((colorMap.colors.length<=20)||colorMap.showLegend)&&Object.hasOwn(colorMap,"colorMapping")){new ColorLegend(this.legends[colorMap.field],this.datamap,this.colorData,colorMap.field,{colormap:colorMap.colorMapping});}else if(colorMap.kind==="continuous"){new Colorbar(this.legends[colorMap.field],{colormap:colorMap.colors,label:colorMap.description,min:colorMap.valueRange[0],max:colorMap.valueRange[1]});}else if(colorMap.kind==="datetime"){new Colorbar(this.legends[colorMap.field],{colormap:colorMap.colors,label:colorMap.description,min:new Date(colorMap.valueRange[0]),max:new Date(colorMap.valueRange[1]),dateFormat:colorMap.dateFormat});}
+this.legendContainer.appendChild(this.legends[colorMap.field]);}}}
   </script>
   <script>
     var getNextSibling=function(elem,selector){var sibling=elem.nextElementSibling;if(!selector)return sibling;while(sibling){if(sibling.matches(selector))return sibling;sibling=sibling.nextElementSibling}};function formatTocButtonHtml(icon,labelId){return`<button class="toc-btn" data-label-id="${labelId}">${icon}</button>`;}
@@ -510,7 +530,7 @@ this.cache.clear();}}
     splashWarning.innerHTML = `
       <h2>Interactive Map of Wikipedia</h2>
       <p>
-        <p>This page will download around 300MB of data to populate an interactive map of Wikipedia.</p><p>Initial loading may take some time...</p>
+        <p>This page will download around 200MB of data to populate an interactive map of Wikipedia.</p><p>Initial loading may take some time...</p>
       </p>
     `;
     overlay.appendChild(splashWarning);
@@ -573,6 +593,24 @@ this.cache.clear();}}
       ];
     const labelDataEncoded = [`${originURL}/datamapplot_label_data.zip`];
     
+    
+    const colorDataEncoded = [
+      `${originURL}/datamapplot_color_data_0.zip`,
+      `${originURL}/datamapplot_color_data_1.zip`,
+      `${originURL}/datamapplot_color_data_2.zip`,
+      `${originURL}/datamapplot_color_data_3.zip`,
+      `${originURL}/datamapplot_color_data_4.zip`,
+      `${originURL}/datamapplot_color_data_5.zip`,
+      `${originURL}/datamapplot_color_data_6.zip`,
+      `${originURL}/datamapplot_color_data_7.zip`,
+      `${originURL}/datamapplot_color_data_8.zip`,
+      `${originURL}/datamapplot_color_data_9.zip`,
+      `${originURL}/datamapplot_color_data_10.zip`,
+      `${originURL}/datamapplot_color_data_11.zip`,
+      `${originURL}/datamapplot_color_data_12.zip`,
+      `${originURL}/datamapplot_color_data_13.zip`,
+      `${originURL}/datamapplot_color_data_14.zip`,
+      ];
     
 
     // Blob for the parsing worker
@@ -644,6 +682,8 @@ this.cache.clear();}}
     const pointDataWorker = new Worker(workerUrl);
     const metaDataWorker = new Worker(workerUrl);
     
+    const colorDataWorker = new Worker(workerUrl);
+    
 
     const datamap = new DataMap({
       container: container,
@@ -707,6 +747,40 @@ this.cache.clear();}}
           }
       };
 
+      
+      colorDataWorker.postMessage({encodedData: colorDataEncoded, JSONParse: false});
+
+      colorDataWorker.onmessage = async function(event) {
+        if (event.data.type === "progress") {
+          updateProgressBar('color-data-progress', event.data.progress);
+          // console.log("Color data progress: ", event.data.progress);
+        } else {
+          const { data } = event.data;
+          
+          const chunkArray = data.map(async ({ chunkIndex, chunkData }) => {
+            return {chunkIndex: chunkIndex, chunkData: await simpleArrowParser(chunkData)};
+          });
+          const colorData = await Promise.all(chunkArray).then(combineTypedTableChunks);
+          
+
+          document.getElementById("loading").style.display = "none";
+          updateProgressBar('color-data-progress', 100);
+          checkAllDataLoaded();
+
+          const colorMapContainer = document.getElementById("colormap-selector-container");
+          const legendContainer = document.getElementById("legend-container");
+          
+          const colorMaps = [{"field": "none", "description": "Clusters", "colors": ["#625bc4", "#447630", "#952d2d", "#da9e91", "#86b6c3"], "kind": "categorical"}, {"field": "inlinks", "description": "Log of Incoming Link Count", "colors": ["#def5e5", "#dcf4e3", "#daf3e1", "#d8f2e0", "#d6f1de", "#d4f1dc", "#d2f0db", "#d0efd9", "#ceeed7", "#ccedd6", "#caedd4", "#c8ecd2", "#c6ebd1", "#c4eacf", "#c2e9cd", "#c0e9cc", "#bee8ca", "#bbe7c8", "#b9e6c7", "#b7e6c5", "#b5e5c4", "#b2e4c2", "#b0e4c1", "#aee3c0", "#abe2be", "#a9e1bd", "#a6e1bc", "#a4e0bb", "#a1dfb9", "#9edfb8", "#9cdeb7", "#99ddb6", "#96ddb5", "#94dcb5", "#91dbb4", "#8edbb3", "#8bdab2", "#88d9b1", "#85d9b1", "#82d8b0", "#7fd7af", "#7cd6af", "#79d6ae", "#76d5ae", "#73d4ad", "#70d4ad", "#6dd3ad", "#6ad2ad", "#68d1ad", "#65d0ad", "#62cfac", "#60ceac", "#5ecdad", "#5bcdad", "#59ccad", "#57cbad", "#55caad", "#53c9ad", "#52c7ad", "#50c6ad", "#4fc5ad", "#4dc4ad", "#4cc3ad", "#4bc2ad", "#49c1ad", "#48c0ad", "#47bfad", "#46bead", "#45bdad", "#44bcad", "#43baad", "#42b9ad", "#41b8ad", "#40b7ad", "#3fb6ad", "#3fb5ad", "#3eb4ad", "#3db3ad", "#3cb2ad", "#3cb1ad", "#3bafad", "#3aaead", "#3aadac", "#39acac", "#39abac", "#38aaac", "#38a9ac", "#37a8ac", "#37a6ac", "#37a5ac", "#36a4ab", "#36a3ab", "#36a2ab", "#35a1ab", "#35a0ab", "#359fab", "#359eaa", "#359caa", "#359baa", "#349aaa", "#3499aa", "#3498a9", "#3497a9", "#3496a9", "#3495a9", "#3493a8", "#3492a8", "#3491a8", "#3490a8", "#348fa7", "#348ea7", "#348da7", "#348ca7", "#348ba6", "#3489a6", "#3488a6", "#3487a6", "#3486a5", "#3485a5", "#3484a5", "#3483a5", "#3482a4", "#3480a4", "#347fa4", "#357ea4", "#357da3", "#357ca3", "#357ba3", "#357aa2", "#3579a2", "#3578a2", "#3576a2", "#3575a1", "#3574a1", "#3573a1", "#3572a1", "#3671a0", "#3670a0", "#366fa0", "#366da0", "#366ca0", "#366b9f", "#366a9f", "#36699f", "#37689f", "#37669e", "#37659e", "#37649e", "#38639d", "#38629d", "#38619d", "#385f9c", "#395e9c", "#395d9c", "#3a5c9b", "#3a5b9b", "#3a599a", "#3b589a", "#3b5799", "#3b5698", "#3c5598", "#3c5397", "#3d5296", "#3d5195", "#3e5095", "#3e4f94", "#3e4d93", "#3f4c92", "#3f4b90", "#3f4a8f", "#40498e", "#40488d", "#40478b", "#40468a", "#414488", "#414387", "#414285", "#414184", "#414082", "#413f80", "#413e7f", "#413e7d", "#413d7b", "#403c79", "#403b78", "#403a76", "#403974", "#403872", "#3f3770", "#3f366f", "#3f366d", "#3e356b", "#3e3469", "#3e3367", "#3d3266", "#3d3164", "#3c3162", "#3c3060", "#3b2f5f", "#3b2e5d", "#3b2d5b", "#3a2c59", "#3a2c58", "#392b56", "#382a54", "#382953", "#372851", "#37284f", "#36274d", "#35264c", "#35254a", "#342548", "#342447", "#332345", "#322243", "#312142", "#312140", "#30203e", "#2f1f3d", "#2e1e3b", "#2e1e39", "#2d1d38", "#2c1c36", "#2b1c35", "#2a1b33", "#291a31", "#291930", "#28192e", "#27182d", "#26172b", "#251729", "#241628", "#231526", "#221425", "#211423", "#201322", "#1f1220", "#1e111f", "#1d111d", "#1c101c", "#1b0f1a", "#1a0e19", "#190e18", "#180d16", "#170c15", "#160b13", "#150a12", "#140910", "#13090f", "#12080d", "#11070c", "#10060a", "#0f0609", "#0e0508", "#0d0406", "#0b0405"], "kind": "continuous", "nColors": 5, "valueRange": [0.0, 5.127529162438011]}, {"field": "categories", "description": "Log of Number of Categories", "colors": ["#faebdd", "#fae9da", "#fae8d8", "#fae6d6", "#f9e5d4", "#f9e3d2", "#f9e2d0", "#f9e0cd", "#f9dfcb", "#f9ddc9", "#f8dcc7", "#f8dac5", "#f8d9c3", "#f8d7c0", "#f8d6be", "#f8d4bc", "#f8d3ba", "#f8d1b8", "#f7d0b5", "#f7cfb3", "#f7cdb1", "#f7ccaf", "#f7caac", "#f7c9aa", "#f7c7a8", "#f7c6a6", "#f7c4a4", "#f7c2a2", "#f6c19f", "#f6bf9d", "#f6be9b", "#f6bc99", "#f6bb97", "#f6b995", "#f6b893", "#f6b691", "#f6b48f", "#f6b38d", "#f6b18b", "#f6b089", "#f6ae87", "#f6ad85", "#f6ab83", "#f6a981", "#f6a880", "#f6a67e", "#f6a47c", "#f6a37a", "#f6a178", "#f6a077", "#f69e75", "#f69c73", "#f69b71", "#f59970", "#f5976e", "#f5966c", "#f5946b", "#f59269", "#f59067", "#f58f66", "#f58d64", "#f58b63", "#f58a61", "#f58860", "#f4865e", "#f4845d", "#f4835b", "#f4815a", "#f47f58", "#f47d57", "#f47c55", "#f47a54", "#f37852", "#f37651", "#f37450", "#f3734e", "#f3714d", "#f26f4c", "#f26d4b", "#f26b49", "#f26948", "#f26747", "#f16646", "#f16445", "#f16244", "#f06043", "#f05e42", "#f05c42", "#ef5a41", "#ef5840", "#ef5640", "#ee543f", "#ee523f", "#ed503e", "#ed4e3e", "#ec4c3e", "#ec4a3e", "#eb483e", "#eb463e", "#ea443e", "#e9423e", "#e8403e", "#e83f3f", "#e73d3f", "#e63b40", "#e53940", "#e43841", "#e33641", "#e23442", "#e13342", "#e03143", "#df2f44", "#de2e44", "#dd2c45", "#dc2b46", "#db2946", "#d92847", "#d82748", "#d72549", "#d62449", "#d5224a", "#d3214b", "#d2204c", "#d11f4c", "#cf1e4d", "#ce1d4e", "#cd1c4e", "#cb1b4f", "#ca1a50", "#c81951", "#c71951", "#c51852", "#c41753", "#c21753", "#c11754", "#bf1654", "#bd1655", "#bc1656", "#ba1656", "#b91657", "#b71657", "#b51657", "#b41658", "#b21758", "#b01759", "#af1759", "#ad1759", "#ab185a", "#aa185a", "#a8185a", "#a6195a", "#a4195b", "#a3195b", "#a11a5b", "#9f1a5b", "#9e1a5b", "#9c1b5b", "#9a1b5b", "#981b5b", "#971c5b", "#951c5b", "#931c5b", "#921c5b", "#901d5b", "#8e1d5b", "#8c1d5b", "#8b1d5b", "#891e5b", "#871e5b", "#861e5b", "#841e5a", "#821e5a", "#811e5a", "#7f1e5a", "#7d1f5a", "#7b1f59", "#7a1f59", "#781f59", "#761f58", "#751f58", "#731f58", "#711f57", "#701f57", "#6e1f57", "#6d1f56", "#6b1f56", "#691f55", "#681f55", "#661f54", "#641f54", "#631f53", "#611f53", "#601f52", "#5e1f52", "#5c1e51", "#5b1e51", "#591e50", "#581e4f", "#561e4f", "#541e4e", "#531e4d", "#511e4d", "#501d4c", "#4e1d4b", "#4c1d4b", "#4b1d4a", "#491d49", "#481c48", "#461c48", "#451c47", "#431c46", "#421b45", "#401b44", "#3f1b43", "#3d1a42", "#3c1a42", "#3a1a41", "#381a40", "#37193f", "#35193e", "#34193d", "#33183c", "#31183b", "#30173a", "#2e1739", "#2d1738", "#2b1637", "#2a1636", "#281535", "#271534", "#251433", "#241432", "#221331", "#211330", "#20122e", "#1e122d", "#1d112c", "#1b112b", "#1a102a", "#180f29", "#170f28", "#160e27", "#140e26", "#130d25", "#110c24", "#100b23", "#0e0b22", "#0d0a21", "#0b0920", "#0a091f", "#08081e", "#07071d", "#06071c", "#05061b", "#04051a", "#03051a"], "kind": "continuous", "nColors": 5, "valueRange": [0.0, 2.60959440922522]}, {"field": "views", "description": "Log of Page Views per Month", "colors": ["#ffffe5", "#feffe2", "#feffdf", "#fdfedd", "#fdfeda", "#fcfed7", "#fcfed4", "#fbfed2", "#fbfdcf", "#fafdcc", "#fafdc9", "#f9fdc7", "#f9fdc4", "#f8fdc1", "#f8fcbe", "#f7fcbc", "#f7fcb9", "#f5fbb8", "#f3fab6", "#f1fab5", "#eff9b3", "#edf8b2", "#ecf7b1", "#eaf7af", "#e8f6ae", "#e6f5ac", "#e4f4ab", "#e2f4aa", "#e0f3a8", "#def2a7", "#ddf1a6", "#dbf1a4", "#d9f0a3", "#d6efa2", "#d3eda0", "#d0ec9f", "#ceeb9e", "#cbea9c", "#c8e99b", "#c5e89a", "#c3e698", "#c0e597", "#bde496", "#bae394", "#b8e293", "#b5e092", "#b2df90", "#afde8f", "#acdd8e", "#a9db8c", "#a6da8b", "#a2d88a", "#9fd788", "#9cd687", "#98d486", "#95d385", "#92d183", "#8ed082", "#8bce81", "#88cd7f", "#84cb7e", "#81ca7d", "#7ec97b", "#7ac77a", "#75c578", "#72c376", "#6fc174", "#6bc072", "#68be71", "#64bc6f", "#61bb6d", "#5db96b", "#5ab76a", "#56b568", "#53b466", "#4fb264", "#4cb063", "#49af61", "#45ad5f", "#42ab5d", "#3fa95c", "#3ea75a", "#3ca458", "#3aa257", "#389f55", "#369d54", "#349a52", "#329850", "#30954f", "#2f934d", "#2d914b", "#2b8e4a", "#298c48", "#278946", "#258745", "#238443", "#218242", "#1f8142", "#1d7f41", "#1a7d40", "#187b3f", "#167a3f", "#14783e", "#12763d", "#10743c", "#0d733c", "#0b713b", "#096f3a", "#076d39", "#056c39", "#026a38", "#006837", "#006636", "#006435", "#006234", "#005f34", "#005d33", "#005b32", "#005931", "#005730", "#00542f", "#00522e", "#00502d", "#004e2d", "#004c2c", "#00492b", "#00472a", "#004529"], "kind": "continuous", "nColors": 5, "valueRange": [0.0, 7.190785536851542]}];
+          const colorSelector = new ColormapSelectorTool(
+            colorMaps,
+            colorMapContainer,
+            colorData,
+            legendContainer,
+            datamap,
+          );
+          datamap.colorSelector = colorSelector;
+        }
+      };
       
     }
 
@@ -843,6 +917,7 @@ this.cache.clear();}}
         };
     };
     
+    
     loadPointDataLayer();
     loadLabelDataLayer();
     loadMetaData();
@@ -904,8 +979,39 @@ async (identifier) => {
     );
     
     
-
-const infoWidget = document.getElementById('info-box');
+const infoWidget = document.createElement("div");
+infoWidget.id = "info-box";
+infoWidget.className = "container-box more-opaque stack-box";
+infoWidget.innerHTML = `
+<div id="info-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+  </svg>    
+</div>
+<div id="info-content">
+    <h3>About This Data Map</h3>
+    <p>
+        This page proivides an explorable map of English Wikipedia. It was built
+        using <a href="https://huggingface.co/datasets/Cohere/wikipedia-2023-11-embed-multilingual-v3">embeddings 
+        provided by Cohere</a>, openTSNE, <a href="https://github.com/TutteInstitute/toponymy">Toponymy</a>,
+        and <a href="https://github.com/TutteInstitute/datamapplot">DataMapPlot</a>. It exists primarily as a showcase for some of the
+        capabilities provided by DataMapPlot and the Toponymy library.
+    </p>
+    <p>
+        Topic labels were generated automatically using Toponymy and the Cohere Command-R LLM.
+    </p>
+    <p>
+      Click and drag to pan, use mouse-wheel or pinch to zoom. Clicking on a point will take you to the associated page.<br/>
+      The topic tree allows for navigation to specific topics -- expand topics by clicking on the triangle to reveal more details sub-topics.
+      Click on a topic name to zoom to that topic on the map.<br/>
+      Hold down shift and click-drag to create a selection, which will generate a word-cloud from the content of selected pages.
+      Select an empty area to clear the word-cloud/selection.
+    </p>
+</div>
+`
+const stackContainer = document.getElementsByClassName("stack bottom-left")[0];
+stackContainer.insertBefore(infoWidget, stackContainer.firstChild);
 if (infoWidget) {
     infoWidget.addEventListener('click', function() {
         infoWidget.classList.toggle('expanded');
@@ -914,7 +1020,7 @@ if (infoWidget) {
     console.error("Element with ID 'info-widget' not found.");
 }
 
-const _STOPWORDS = new Set(['under', 'thereby', 'done', 'sincere', 'to', 'due', 'few', 'fifteen', 'co', 'fire', 'well', 'interest', 'most', 'side', 'via', 'when', 'latterly', 'now', 'since', 'bottom', 'noone', 'once', 'everywhere', 'who', 'whereafter', 'whether', 'amoungst', 'by', 'still', 'amount', 'hereupon', 'eg', 'because', 'nothing', 'per', 'had', 'beside', 'cant', 'this', 'empty', 'onto', 'part', 'before', 'not', 'anything', 'whither', 'would', 'perhaps', 'can', 'much', 'be', 'yours', 'further', 'therefore', 'down', 'namely', 'our', 'con', 'being', 'call', 'no', 'upon', 'thus', 'has', 'could', 'hasnt', 'enough', 'hereafter', 'whom', 'therein', 'seem', 'otherwise', 'same', 'where', 'nevertheless', 'thru', 'these', 'will', 'former', 'their', 'a', 'almost', 'it', 'own', 'elsewhere', 'us', 'those', 'whose', 'anyhow', 'inc', 'hers', 'de', 'amongst', 'were', 'wherever', 'below', 'many', 'whenever', 'please', 'bill', 'always', 'do', 'front', 'name', 'even', 'someone', 'latter', 'between', 'have', 'third', 'some', 'another', 'hundred', 'for', 'whoever', 'wherein', 'may', 'nine', 'show', 'beyond', 'seeming', 'eleven', 'me', 'within', 'ourselves', 'first', 'next', 'an', 'rather', 'full', 'sometimes', 'anyone', 'around', 'am', 'yourself', 'etc', 'towards', 'along', 'couldnt', 'which', 'find', 'six', 'mostly', 'among', 'they', 'yourselves', 'i', 'there', 'never', 'out', 'system', 'whereby', 'might', 'become', 'twelve', 'are', 'through', 'un', 'about', 'somewhere', 'his', 'five', 'both', 'give', 'that', 'whereas', 'how', 'myself', 'is', 'anywhere', 'while', 'yet', 'although', 'either', 'after', 'already', 'but', 'meanwhile', 'you', 'cry', 'only', 'your', 'last', 'her', 'something', 'other', 'sometime', 'every', 'themselves', 'becoming', 'thence', 'also', 'ever', 'neither', 'several', 'why', 'itself', 'least', 'into', 'formerly', 'back', 'than', 'its', 'the', 'becomes', 'thin', 'very', 'however', 'describe', 'thick', 'at', 'across', 'moreover', 'beforehand', 'top', 'take', 'or', 'behind', 'anyway', 'then', 'everything', 'ie', 'keep', 'we', 'so', 'mill', 'others', 'nor', 'been', 'she', 'somehow', 'them', 'off', 'sixty', 'throughout', 'forty', 'over', 'any', 'during', 'hence', 'more', 'seemed', 'seems', 'nobody', 'besides', 'from', 'in', 'him', 'whole', 'became', 'as', 'found', 'four', 'with', 'toward', 'whence', 'cannot', 'detail', 'he', 'until', 'mine', 'up', 'if', 'all', 'again', 'here', 'nowhere', 'hereby', 'get', 'above', 'else', 'often', 'herein', 'against', 'three', 'each', 'go', 'ltd', 'together', 'except', 'was', 'such', 'everyone', 'see', 're', 'what', 'fifty', 'ours', 'too', 'none', 'whereupon', 'twenty', 'made', 'move', 'put', 'whatever', 'one', 'should', 'eight', 'ten', 'and', 'less', 'herself', 'must', 'indeed', 'though', 'fill', 'alone', 'afterwards', 'serious', 'without', 'my', 'thereafter', 'two', 'of', 'on', 'thereupon', 'himself']);
+const _STOPWORDS = new Set(['at', 'ten', 'your', 'system', 'many', 'among', 'our', 'can', 'towards', 'forty', 'and', 'perhaps', 'everywhere', 'full', 'out', 'between', 'you', 'put', 'without', 'detail', 'please', 'seemed', 'what', 'others', 'anyone', 'sixty', 'third', 'becomes', 'indeed', 'cant', 'since', 'a', 'show', 'also', 'has', 'across', 'amount', 'against', 'hasnt', 'call', 'fill', 'mostly', 'via', 'itself', 'ltd', 'whatever', 'everyone', 'last', 'nowhere', 'thereafter', 'him', 'might', 'moreover', 'become', 'under', 'yours', 'nine', 'anyway', 'somehow', 'found', 'myself', 'would', 'much', 'such', 'more', 'someone', 'whoever', 'twenty', 'due', 'may', 'around', 'very', 'do', 'give', 'within', 'serious', 'everything', 'is', 'thereby', 'else', 'that', 'above', 'inc', 'twelve', 'were', 'interest', 'cannot', 'on', 'once', 'three', 'seem', 'ourselves', 'through', 'how', 'becoming', 'herself', 'by', 'hers', 'been', 'before', 'none', 'de', 'co', 'onto', 'name', 'hence', 'thin', 'already', 'during', 'herein', 'ever', 'off', 'still', 'up', 'because', 'for', 'hereupon', 'yet', 'nobody', 'always', 'here', 'whole', 'never', 'describe', 'five', 'but', 'take', 'the', 'elsewhere', 'thick', 'with', 'hundred', 'whereas', 'anyhow', 'whither', 'whom', 'we', 'these', 'again', 'became', 'she', 'back', 'often', 'from', 'there', 'side', 'even', 'latterly', 'two', 'something', 'well', 'below', 'done', 'will', 'beyond', 'meanwhile', 'all', 'yourselves', 'it', 'per', 'each', 'i', 'fifty', 'thru', 'first', 'behind', 'nevertheless', 'hereby', 'couldnt', 'whose', 'bottom', 'or', 'have', 'why', 'had', 're', 'should', 'afterwards', 'seems', 'sincere', 'beside', 'was', 'be', 'too', 'keep', 'am', 'whereafter', 'if', 'further', 'though', 'whether', 'as', 'although', 'while', 'after', 'latter', 'could', 'however', 'otherwise', 'top', 'find', 'he', 'me', 'thereupon', 'which', 'except', 'formerly', 'own', 'thus', 'into', 'who', 'every', 'anything', 'whereupon', 'mine', 'they', 'beforehand', 'former', 'not', 'nothing', 'therein', 'my', 'us', 'when', 'those', 'fifteen', 'eg', 'ie', 'both', 'wherein', 'so', 'some', 'made', 'to', 'almost', 'enough', 'down', 'move', 'must', 'wherever', 'yourself', 'fire', 'themselves', 'his', 'anywhere', 'whereby', 'their', 'get', 'least', 'rather', 'most', 'hereafter', 'sometimes', 'over', 'con', 'are', 'either', 'an', 'etc', 'cry', 'front', 'whenever', 'see', 'less', 'neither', 'throughout', 'now', 'eleven', 'of', 'same', 'therefore', 'one', 'then', 'part', 'in', 'her', 'where', 'being', 'about', 'ours', 'seeming', 'its', 'mill', 'than', 'sometime', 'them', 'together', 'thence', 'somewhere', 'only', 'six', 'no', 'namely', 'empty', 'another', 'amoungst', 'several', 'amongst', 'any', 'alone', 'few', 'other', 'bill', 'toward', 'nor', 'un', 'along', 'eight', 'besides', 'noone', 'go', 'himself', 'next', 'whence', 'this', 'four', 'until', 'upon']);
 const _ROTATIONS = [0, -90, 90, -45, 45, -30, 30, -60, 60, -15, 15, -75, 75, -7.5, 7.5, -22.5, 22.5, -52.5, 52.5, -37.5, 37.5, -67.5, 67.5];
 let wordCloudStackContainer = document.getElementsByClassName("stack top-right")[0];
 const wordCloudItem = document.createElement("div");
