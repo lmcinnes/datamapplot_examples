@@ -1,0 +1,25 @@
+[project]
+name = "notebooks"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "azure-ai-inference>=1.0.0b9",
+    "datamapplot",
+    "datashader>=0.18.2",
+    "huggingface-hub>=0.34.4",
+    "ipywidgets>=8.1.7",
+    "jupyterlab>=4.4.6",
+    "matplotlib>=3.10.5",
+    "opentsne>=1.0.2",
+    "pandas>=2.3.1",
+    "pyarrow>=21.0.0",
+    "python-dotenv>=1.1.1",
+    "scikit-learn>=1.7.1",
+    "seaborn>=0.13.2",
+    "stop-words>=2018.7.23",
+    "toponymy>=0.3.0",
+    "tqdm>=4.67.1",
+]
+
+[tool.uv.sources]
+datamapplot = { path = "../../datamapplot" }

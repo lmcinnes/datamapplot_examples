@@ -1,0 +1,6 @@
+work
+*.zip
+.ipynb_checkpoints
+.venv
+.env
+uv.lock
